@@ -1,12 +1,5 @@
-# Requirements for TopologicST
-pyvista==0.36.1
-streamlit==1.12.0
-plotly
-pandas
-numpy
-pythreejs
-panel
-ipywidgets==7.7.2
+# Requirements for TopologicHB
+streamlit
 honeybee
 honeybee_energy
 honeybee_radiance
