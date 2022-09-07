@@ -140,30 +140,33 @@ def processItem(tpBuilding=None,
         tpCellConditioned = True
         if tpDictionary:
             keyName = getKeyName(tpDictionary, 'Story')
-            tpCellStory = DictionaryValueAtKey.processItem([tpDictionary, keyName])
-            if tpCellStory:
-                tpCellStory = tpCellStory.replace(" ","_")
-            else:
+            try:
+                tpCellStory = DictionaryValueAtKey.processItem([tpDictionary, keyName])
+                if tpCellStory:
+                    tpCellStory = tpCellStory.replace(" ","_")
+            except:
                 tpCellStory = fl[spaceNumber]
             if roomNameKey:
                 keyName = getKeyName(tpDictionary, roomNameKey)
             else:
                 keyName = getKeyName(tpDictionary, 'Name')
-            tpCellName = DictionaryValueAtKey.processItem([tpDictionary,keyName])
-            if tpCellName:
-                tpCellName = createUniqueName(tpCellName.replace(" ","_"), spaceNames, 1)
-            else:
+            try:
+                tpCellName = DictionaryValueAtKey.processItem([tpDictionary,keyName])
+                if tpCellName:
+                    tpCellName = createUniqueName(tpCellName.replace(" ","_"), spaceNames, 1)
+            except:
                 tpCellName = tpCellStory+"_SPACE_"+(str(spaceNumber+1))
             if roomTypeKey:
                 keyName = getKeyName(tpDictionary, roomTypeKey)
             else:
                 keyName = getKeyName(tpDictionary, 'Program')
-            tpCellProgramIdentifier = DictionaryValueAtKey.processItem([tpDictionary, keyName])
-            if tpCellProgramIdentifier:
-                program = prog_type_lib.program_type_by_identifier(tpCellProgramIdentifier)
-            elif defaultProgramIdentifier:
-                program = prog_type_lib.program_type_by_identifier(defaultProgramIdentifier)
-            else:
+            try:
+                tpCellProgramIdentifier = DictionaryValueAtKey.processItem([tpDictionary, keyName])
+                if tpCellProgramIdentifier:
+                    program = prog_type_lib.program_type_by_identifier(tpCellProgramIdentifier)
+                elif defaultProgramIdentifier:
+                    program = prog_type_lib.program_type_by_identifier(defaultProgramIdentifier)
+            except:
                 program = prog_type_lib.office_program #Default Office Program as a last resort
             keyName = getKeyName(tpDictionary, 'construction_set')
             tpCellConstructionSetIdentifier = DictionaryValueAtKey.processItem([tpDictionary, keyName])
