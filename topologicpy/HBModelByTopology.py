@@ -140,7 +140,7 @@ def processItem(tpBuilding=None,
         tpCellConditioned = True
         if tpDictionary:
             keyName = getKeyName(tpDictionary, 'Story')
-            tpCellStory = DictionaryValueAtKey.processItem(tpDictionary, keyName)
+            tpCellStory = DictionaryValueAtKey.processItem([tpDictionary, keyName])
             if tpCellStory:
                 tpCellStory = tpCellStory.replace(" ","_")
             else:
@@ -149,7 +149,7 @@ def processItem(tpBuilding=None,
                 keyName = getKeyName(tpDictionary, roomNameKey)
             else:
                 keyName = getKeyName(tpDictionary, 'Name')
-            tpCellName = DictionaryValueAtKey.processItem(tpDictionary,keyName)
+            tpCellName = DictionaryValueAtKey.processItem([tpDictionary,keyName])
             if tpCellName:
                 tpCellName = createUniqueName(tpCellName.replace(" ","_"), spaceNames, 1)
             else:
@@ -158,7 +158,7 @@ def processItem(tpBuilding=None,
                 keyName = getKeyName(tpDictionary, roomTypeKey)
             else:
                 keyName = getKeyName(tpDictionary, 'Program')
-            tpCellProgramIdentifier = DictionaryValueAtKey.processItem(tpDictionary, keyName)
+            tpCellProgramIdentifier = DictionaryValueAtKey.processItem([tpDictionary, keyName])
             if tpCellProgramIdentifier:
                 program = prog_type_lib.program_type_by_identifier(tpCellProgramIdentifier)
             elif defaultProgramIdentifier:
@@ -166,7 +166,7 @@ def processItem(tpBuilding=None,
             else:
                 program = prog_type_lib.office_program #Default Office Program as a last resort
             keyName = getKeyName(tpDictionary, 'construction_set')
-            tpCellConstructionSetIdentifier = DictionaryValueAtKey.processItem(tpDictionary, keyName)
+            tpCellConstructionSetIdentifier = DictionaryValueAtKey.processItem([tpDictionary, keyName])
             if tpCellConstructionSetIdentifier:
                 constr_set = constr_set_lib.construction_set_by_identifier(tpCellConstructionSetIdentifier)
             elif defaultConstructionSetIdentifier:
@@ -199,7 +199,7 @@ def processItem(tpBuilding=None,
                         apertureTopology = topologic.Aperture.Topology(tpFaceAperture)
                         tpFaceApertureDictionary = apertureTopology.GetDictionary()
                         if tpFaceApertureDictionary:
-                            tpFaceApertureType = DictionaryValueAtKey.processItem(tpFaceApertureDictionary,'type')
+                            tpFaceApertureType = DictionaryValueAtKey.processItem([tpFaceApertureDictionary,'type'])
                         hbFaceAperturePoints = []
                         tpFaceApertureVertices = []
                         _ = apertureTopology.ExternalBoundary().Vertices(None, tpFaceApertureVertices)
@@ -216,7 +216,7 @@ def processItem(tpBuilding=None,
                 else:
                     tpFaceDictionary = tpCellFace.GetDictionary()
                     if (abs(tpCellFaceNormal[2]) < 1e-6) and tpFaceDictionary: #It is a mostly vertical wall and has a dictionary
-                        apertureRatio = DictionaryValueAtKey.processItem(tpFaceDictionary,'apertureRatio')
+                        apertureRatio = DictionaryValueAtKey.processItem([tpFaceDictionary,'apertureRatio'])
                         if apertureRatio:
                             hbRoomFace.apertures_by_ratio(apertureRatio, tolerance=0.01)
                 fType = honeybee.facetype.get_type_from_normal(Vector3D(tpCellFaceNormal[0],tpCellFaceNormal[1],tpCellFaceNormal[2]), roof_angle=30, floor_angle=150)
