@@ -4,3 +4,6 @@ honeybee
 honeybee_energy
 honeybee_radiance
 ladybug
+pollination-streamlit>=0.5.0
+pollination-streamlit-viewer>=0.4.5
+pollination-streamlit-io==0.36.6
