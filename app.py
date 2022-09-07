@@ -31,8 +31,8 @@ st.set_page_config(
     page_icon="📊",
     layout="wide"
 )
-building_json_file = st.file_uploader("", type="json", accept_multiple_files=False)
-shading_json_file = st.file_uploader("", type="json", accept_multiple_files=False)
+building_json_file = st.file_uploader("Upload Building", type="json", accept_multiple_files=False)
+shading_json_file = st.file_uploader("Upload Shading Cluster", type="json", accept_multiple_files=False)
 
 building = None
 shadingCluster = None
