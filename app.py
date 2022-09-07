@@ -117,7 +117,6 @@ with st.form('daylight-factor-job'):
     grid_filter = st.text_input('Grid Filter', value='*')
     min_sensor_count = st.number_input('Min Sensor Count', value=200)
     #hbjson_data = st.file_uploader('Upload HBJSON')
-    hbjson_data = hbjson_string #Get the model from Topologic
     rad_parameters = st.text_input('Rad Parameters',
                                    value='-ab 2 -aa 0.1 -ad 2048 -ar 64')
     # TODO: change ends
@@ -129,7 +128,7 @@ with st.form('daylight-factor-job'):
         # create HBJSON file path
         hbjson_file = Path('.', 'model.hbjson')
         # write HBJSON file
-        hbjson_file.write_bytes(hbjson_data.read())
+        hbjson_file.write_bytes(hbjson_string.encode('utf-8'))
 
         # recipe inputs
         # TODO: This will change based on the recipe you select
