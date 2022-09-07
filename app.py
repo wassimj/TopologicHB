@@ -32,17 +32,12 @@ st.set_page_config(
     layout="wide"
 )
 building_json_file = st.file_uploader("Upload Building", type="json", accept_multiple_files=False)
-shading_json_file = st.file_uploader("Upload Shading Cluster", type="json", accept_multiple_files=False)
 
 building = None
 shadingCluster = None
 if building_json_file:
     topologies = TopologyByImportedJSONMK1.processItem(building_json_file)
     building = topologies[0]
-
-if shading_json_file:
-    topologies = TopologyByImportedJSONMK1.processItem(shading_json_file)
-    shadingCluster = topologies[0]
 
 if building:
     hbmodel = HBModelByTopology.processItem(tpBuilding=building,
