@@ -248,6 +248,7 @@ def processItem(tpBuilding=None,
         #room.properties.energy.construction_set = constr_set
     #Room.stories_by_floor_height(rooms, min_difference=2.0)
 
+    hbShades = []
     if(tpShadingFacesCluster):
         hbShades = []
         tpShadingFaces = []
