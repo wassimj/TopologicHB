@@ -169,12 +169,13 @@ def processItem(tpBuilding=None,
             except:
                 program = prog_type_lib.office_program #Default Office Program as a last resort
             keyName = getKeyName(tpDictionary, 'construction_set')
-            tpCellConstructionSetIdentifier = DictionaryValueAtKey.processItem([tpDictionary, keyName])
-            if tpCellConstructionSetIdentifier:
-                constr_set = constr_set_lib.construction_set_by_identifier(tpCellConstructionSetIdentifier)
-            elif defaultConstructionSetIdentifier:
-                constr_set = constr_set_lib.construction_set_by_identifier(defaultConstructionSetIdentifier)
-            else:
+            try:
+                tpCellConstructionSetIdentifier = DictionaryValueAtKey.processItem([tpDictionary, keyName])
+                if tpCellConstructionSetIdentifier:
+                    constr_set = constr_set_lib.construction_set_by_identifier(tpCellConstructionSetIdentifier)
+                elif defaultConstructionSetIdentifier:
+                    constr_set = constr_set_lib.construction_set_by_identifier(defaultConstructionSetIdentifier)
+            except:
                 constr_set = constr_set_lib.construction_set_by_identifier("Default Generic Construction Set")
         else:
             tpCellStory = fl[spaceNumber]
