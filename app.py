@@ -58,13 +58,12 @@ if building:
                     roomTypeKey = "Type")
 
     hbjson_string = json.dumps(hbmodel.to_dict())
-    with open("topologic_hbjson.hbjson", "r") as file:
-        btn = st.download_button(
-                label="Download HBJSON file",
-                data=hbjson_string,
-                file_name="topologic_hbjson.hbjson",
-                mime="application/json"
-            )
+    btn = st.download_button(
+            label="Download HBJSON file",
+            data=hbjson_string,
+            file_name="topologic_hbjson.hbjson",
+            mime="application/json"
+        )
 
 
 
