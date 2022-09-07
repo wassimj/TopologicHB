@@ -117,7 +117,7 @@ with st.form('daylight-factor-job'):
     grid_filter = st.text_input('Grid Filter', value='*')
     min_sensor_count = st.number_input('Min Sensor Count', value=200)
     #hbjson_data = st.file_uploader('Upload HBJSON')
-    hbjson_data = hbmodel #Get the model from Topologic
+    hbjson_data = hbjson_string #Get the model from Topologic
     rad_parameters = st.text_input('Rad Parameters',
                                    value='-ab 2 -aa 0.1 -ad 2048 -ar 64')
     # TODO: change ends
