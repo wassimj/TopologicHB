@@ -46,6 +46,7 @@ from honeybee_radiance.modifierset import ModifierSet
 from honeybee_radiance.modifier.material import Glass, Plastic, Trans
 from honeybee_radiance.dynamic import RadianceShadeState, RadianceSubFaceState, \
     StateGeometry
+from honeybee_radiance.sensorgrid import SensorGrid
 
 from ladybug.dt import Time
 from ladybug_geometry.geometry3d.pointvector import Point3D, Vector3D
@@ -131,6 +132,7 @@ def processItem(tpBuilding=None,
     tpCells.sort(key=lambda c: cellFloor(c), reverse=False)
     fl = floorLevels(tpCells, 2)
     spaceNames = []
+    sensorGrids = []
     for spaceNumber, tpCell in enumerate(tpCells):
         tpDictionary = tpCell.GetDictionary()
         tpCellName = None
@@ -227,6 +229,8 @@ def processItem(tpBuilding=None,
                 hbRoomFace.type = fType
                 hbRoomFaces.append(hbRoomFace)
             room = Room(tpCellName, hbRoomFaces, 0.01, 1)
+            floor_mesh = room.generate_grid(0.5, 0.5, 1)
+            sensorGrids.append(SensorGrid.from_mesh3d(tpCellName+"_SG", floor_mesh))
             heat_setpt = ScheduleRuleset.from_constant_value('Room Heating', heatingSetpoint, schedule_types.temperature)
             cool_setpt = ScheduleRuleset.from_constant_value('Room Cooling', coolingSetpoint, schedule_types.temperature)
             humidify_setpt = ScheduleRuleset.from_constant_value('Room Humidifying', humidifyingSetpoint, schedule_types.humidity)
@@ -263,5 +267,6 @@ def processItem(tpBuilding=None,
             hbShade = Shade("SHADINGSURFACE_" + str(faceIndex+1), hbShadingFace)
             hbShades.append(hbShade)
     model = Model(buildingName, rooms, orphaned_shades=hbShades)
+    model.properties.radiance.add_sensor_grids(sensorGrids)
     return model
 
