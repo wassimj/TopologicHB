@@ -35,7 +35,11 @@ st.set_page_config(
     page_icon="📊",
     layout="wide"
 )
-
+icon_column, title_column = st.columns([1,10], gap="small")
+with icon_column:
+    st.image("https://topologic.app/wp-content/uploads/2018/10/Topologic-Logo-250x250.png",width=100)
+with title_column:
+    st.title("Topologic <> Pollination Test App")
 def add_recipe_to_job(new_job, recipe_arguments, recipe_artifacts) -> NewJob:
     """Add recipe arguments and artifacts to a job.
 
