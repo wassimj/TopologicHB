@@ -57,7 +57,7 @@ if building:
                     roomNameKey = "Name",
                     roomTypeKey = "Type")
 
-    hbjson_string = json.dumps(hbModel.to_dict())
+    hbjson_string = json.dumps(hbmodel.to_dict())
     with open("topologic_hbjson.hbjson", "r") as file:
         btn = st.download_button(
                 label="Download HBJSON file",
