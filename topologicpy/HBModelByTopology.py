@@ -267,6 +267,7 @@ def processItem(tpBuilding=None,
             hbShade = Shade("SHADINGSURFACE_" + str(faceIndex+1), hbShadingFace)
             hbShades.append(hbShade)
     model = Model(buildingName, rooms, orphaned_shades=hbShades)
+    model.properties.radiance.sensor_grids = []
     model.properties.radiance.add_sensor_grids(sensorGrids)
     return model
 
