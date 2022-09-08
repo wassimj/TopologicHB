@@ -255,10 +255,6 @@ if not challenge:
     challenge = createRandomChallenge()
     st.session_state['challenge'] = challenge
 
-if 'access_code' not in st.session_state:
-    st.session_state['access_code'] = None
-access_code = st.session_state['access_code']
-
 if 'token' not in st.session_state:
     st.session_state['token'] = None
 token = st.session_state['token']
@@ -269,7 +265,6 @@ refresh_token = st.session_state['refresh_token']
 
 try:
      access_code = st.experimental_get_query_params()['access_code'][0]
-     st.session_state['access_code'] = access_code
 except:
     access_code = None
 
