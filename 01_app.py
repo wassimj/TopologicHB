@@ -259,13 +259,14 @@ if not challenge:
 if 'access_code' not in st.session_state:
     st.session_state['access_code'] = None
 
-st.write("Access Code:", access_code)
 try:
      access_code = st.experimental_get_query_params()['access_code'][0]
      st.session_state['access_code'] = access_code
 except:
     access_code = None
     st.session_state['access_code'] = None
+
+st.write("Access Code:", access_code)
 
 if 'token' not in st.session_state:
     st.session_state['token'] = None
