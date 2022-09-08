@@ -270,13 +270,12 @@ try:
 except:
     access_code = None
 
-st.write("Access Code", access_code)
-
 if not access_code:
     # Verify the app with the challenge
     st.write("Verifying the App with the challenge string")
     verify_url="https://speckle.xyz/authn/verify/"+appID+"/"+challenge
-    st.write("Click this to Verify:", verify_url)
+    link = '#[Login to Speckle]('+verify_url+')#'
+    st.markdown(link, unsafe_allow_html=True)
 else:
     st.write('Challenge: ', challenge)
     st.write('Access Code: ', access_code)
