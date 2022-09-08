@@ -299,7 +299,8 @@ else:
             st.session_state['refresh_token'] = refresh_token
         else:
             st.write("Error occurred : " ,response.status_code, response.text)
-if st.session_state['refersh_token']
+
+if st.session_state['refersh_token']:
     account = get_account_from_token("speckle.xyz", token)
     st.write("Account:", account)
     client = SpeckleClient(host="speckle.xyz")
