@@ -288,6 +288,9 @@ else:
         st.write("Attempting to get token from access code and challenge")
         response = requests.post(
                 url=f"https://speckle.xyz/auth/token",
+                headers={
+                "Content-Type": "application/json",
+                },
                 json={
                     "appSecret": appSecret,
                     "appId": appID,
