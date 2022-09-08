@@ -275,7 +275,7 @@ if not access_code:
     link = '[Login to Speckle]('+verify_url+')'
     st.subheader(link)
 else:
-    st.write('Challenge: ', challenge)
+    st.write('Challenge: ', st.session_state['challenge'])
     st.write('Access Code: ', access_code)
     st.write('Token', token)
     st.write('Refresh Token', refresh_token)
@@ -287,7 +287,7 @@ else:
                     "appSecret": appSecret,
                     "appId": appID,
                     "accessCode": access_code,
-                    "challenge": challenge,
+                    "challenge": st.session_state['challenge'],
                 },
             )
         st.write("Response", response)
