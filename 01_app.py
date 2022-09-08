@@ -278,11 +278,15 @@ if not access_code:
     verify_url="https://speckle.xyz/authn/verify/"+appID+"/"+challenge
     st.write("Click this to Verify:", verify_url)
 else:
-    st.write('Found challenge string stored locally: ', challenge)
-    st.write('Found access code stored locally: ', access_code)
-    st.write("Attempting to get token from access code and challenge")
+    st.write('Challenge: ', challenge)
+    st.write('Access Code: ', access_code)
+    st.write('appSecret: ', appSecret)
+    st.write('appID: ', appID)
+    st.write('Token', token)
+    st.write('Refresh Token', refresh_token)
     if not token or not refresh_token:
-        tokens = requests.post(
+        st.write("Attempting to get token from access code and challenge")
+        response = requests.post(
                 url=f"https://speckle.xyz/auth/token",
                 json={
                     "appSecret": appSecret,
@@ -291,8 +295,8 @@ else:
                     "challenge": challenge,
                 },
             )
-        st.write("Tokens", tokens)
-        token = tokens.json()['token']
+        st.write("Response", response)
+        token = response.json()['token']
         refresh_token = tokens.json()['refreshToken']
         st.session_state['token'] = token
         st.session_state['refresh_token'] = refresh_token
