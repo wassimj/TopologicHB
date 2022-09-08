@@ -299,14 +299,16 @@ else:
                 },
             )
         st.write("Response", response)
-        token = response.json()['token']
-        refresh_token = tokens.json()['refreshToken']
-        st.session_state['token'] = token
-        st.session_state['refresh_token'] = refresh_token
-    st.write('TOKEN: ', token)
-    if token:
+        if (data["cod"] == 200):
+            token = response.json()['token']
+            refresh_token = tokens.json()['refreshToken']
+            st.session_state['token'] = token
+            st.session_state['refresh_token'] = refresh_token
+        elif data["cod"] != 200:
+            st.write("Error occurred : " ,data["cod"], data["message"])
+    else:
         account = get_account_from_token("speckle.xyz", token)
-        st.write("ACCOUNT", account)
+        st.write("Account:", account)
         client = SpeckleClient(host="speckle.xyz")
         client.authenticate_with_token(token)
         try:
@@ -329,5 +331,3 @@ else:
             st.subheader("Preview Image")
             st.components.v1.iframe(src="https://speckle.xyz/preview/"+stream.id, width=250,height=250)
             st.components.v1.iframe(src="https://speckle.xyz/embed?stream="+stream.id+"&transparent=false", width=400,height=600)
-    else:
-        st.write("Process Failed. Could not get account")
