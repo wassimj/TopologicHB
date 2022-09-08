@@ -274,7 +274,6 @@ if not refresh_token:
         link = '[Login to Speckle]('+verify_url+')'
         st.subheader(link)
     else:
-        st.write("Attempting to get token from access code and challenge")
         response = requests.post(
                 url=f"https://speckle.xyz/auth/token",
                 json={
@@ -284,20 +283,16 @@ if not refresh_token:
                     "challenge": st.secrets["challenge"],
                 },
             )
-        st.write("Response", response)
         if (response.status_code == 200):
             token = response.json()['token']
             refresh_token = response.json()['refreshToken']
             st.session_state['token'] = token
             st.session_state['refresh_token'] = refresh_token
-            st.write('Token', token)
-            st.write('Refresh Token', refresh_token)
         else:
             st.write("Error occurred : " ,response.status_code, response.text)
 
 streams = None
 if st.session_state['refresh_token']:
-    st.write("Using the Token")
     account = get_account_from_token("speckle.xyz", token)
     st.write("Account:", account)
     client = SpeckleClient(host="speckle.xyz")
@@ -306,7 +301,6 @@ if st.session_state['refresh_token']:
         streams = getStreams(client)
     except:
         streams = None
-    st.write(streams)
     if not isinstance(streams, list):
         account = get_account_from_token("speckle.xyz", refresh_token)
         client = SpeckleClient(host="speckle.xyz")
@@ -315,7 +309,6 @@ if st.session_state['refresh_token']:
             streams = getStreams(client)
         except:
             streams = None
-        st.write(streams)
 if isinstance(streams, list):
     if len(streams) > 0:
         stream_names = ["Select a stream"]
