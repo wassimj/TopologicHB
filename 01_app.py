@@ -1,16 +1,3 @@
-#--------------------------
-# IMPORT LIBRARIES
-import streamlit as st
-import json
-import numpy as np
-from numpy import arctan, pi, signbit, arctan2, rad2deg
-from numpy.linalg import norm
-import io
-
-from pathlib import Path
-from pollination_streamlit.api.client import ApiClient
-from pollination_streamlit.interactors import NewJob, Recipe
-
 # import topologic
 # This requires some checking of the used OS platform to load the correct version of Topologic
 import sys
@@ -26,132 +13,135 @@ topologicPath = os.path.join(sitePackagesFolderName, topologicFolderName)
 sys.path.append(topologicPath)
 import topologic
 
-from topologicpy import TopologyByImportedJSONMK1, HBModelByTopology
 #--------------------------
+#IMPORT LIBRARIES
+import requests
+import random
+import math
+import string
+#import streamlit
+import streamlit as st
+#specklepy libraries
+from specklepy.api.client import SpeckleClient
+from specklepy.api.credentials import get_account_from_token
+
+import topologic
 #--------------------------
-# PAGE CONFIGURATION
+
+#--------------------------
+#DEFINITIONS
+def createRandomChallenge(length=0):
+    lowercase = list(string.ascii_lowercase)
+    uppercase = list(string.ascii_uppercase)
+    punctuation = ["-",".","_","~"] # Only hyphen, period, underscore, and tilde are allowed by OAuth Code Challenge
+    digits = list(string.digits)
+    masterlist = lowercase+uppercase+digits+punctuation
+    masterlist = masterlist+lowercase+uppercase+digits
+    random.shuffle(masterlist)
+    if 0 < length <= 128:
+        masterlist = random.sample(masterlist, random.randint(length, length))
+    else:
+        masterlist = random.sample(masterlist, random.randint(64, 128))
+    return ''.join(masterlist)
+
+def getStreams(client):
+    return client.stream.list()
+#--------------------------
+
+#--------------------------
+#PAGE CONFIG
 st.set_page_config(
-    page_title="Topologic HBJSON Test Application",
+    page_title="Topologic Speckle Test Application",
     page_icon="📊",
-    layout="wide"
+    layout = "wide"
 )
-icon_column, title_column = st.columns([1,10], gap="small")
-with icon_column:
-    st.image("https://topologic.app/wp-content/uploads/2018/10/Topologic-Logo-250x250.png",width=100)
-with title_column:
-    st.title("Topologic <> Pollination Test App")
-def add_recipe_to_job(new_job, recipe_arguments, recipe_artifacts) -> NewJob:
-    """Add recipe arguments and artifacts to a job.
+#--------------------------
 
-    args:
-        new_job: A NewJob object.
-        recipe_arguments: A dictionary of recipe arguments.
-        recipe_artifacts: A dictionary of recipe artifacts where each items is a
-            dictionary where the key is the name of the input on the recipe and the
-            values are the paths to artifact and the path to the target folder on
-            Pollination.
+#--------------------------
+#CONTAINERS
+header = st.container()
+authenticate = st.container()
+#--------------------------
 
-    returns:
-        A NewJob object with the recipe arguments and artifacts added.
-    """
+#--------------------------
+#HEADER
+#Page Header
+with header:
+    st.title("Topologic Speckle Testing App📈")
+#--------------------------
 
-    for key, val in recipe_artifacts.items():
-        item = new_job.upload_artifact(
-            val['file_path'], val['pollination_target_path'])
-        recipe_arguments[key] = item
+appID = st.secrets["appID"]
+appSecret = st.secrets["appSecret"]
 
-    new_job.arguments = [recipe_arguments]
+# This allows us to store variables locally
+if 'challenge' not in st.session_state:
+    st.session_state['challenge'] = None
 
-    return new_job
+challenge = st.session_state['challenge']
+if not challenge:
+    challenge = createRandomChallenge()
+    st.session_state['challenge'] = None
 
-building_json_file = st.file_uploader("Upload Building", type="json", accept_multiple_files=False)
+if 'access_code' not in st.session_state:
+    st.session_state['access_code'] = None
+access_code = st.session_state['access_code']
 
-building = None
-shadingCluster = None
-if building_json_file:
-    topologies = TopologyByImportedJSONMK1.processItem(building_json_file)
-    building = topologies[0]
+if 'token' not in st.session_state:
+    st.session_state['token'] = None
+token = st.session_state['token']
 
-if building:
-    hbmodel = HBModelByTopology.processItem(tpBuilding=building,
-                    tpShadingFacesCluster=shadingCluster,
-                    buildingName = "Generic_Building",
-                    defaultProgramIdentifier = "Generic Office Program",
-                    defaultConstructionSetIdentifier = "Default Generic Construction Set",
-                    coolingSetpoint = 25.0,
-                    heatingSetpoint = 20.0,
-                    humidifyingSetpoint = 30.0,
-                    dehumidifyingSetpoint = 55.0,
-                    roomNameKey = "Name",
-                    roomTypeKey = "Type")
+if 'refresh_token' not in st.session_state:
+    st.session_state['refresh_token'] = None
+refresh_token = st.session_state['refresh_token']
 
-    hbjson_string = json.dumps(hbmodel.to_dict())
-    btn = st.download_button(
-            label="Download HBJSON file",
-            data=hbjson_string,
-            file_name="topologic_hbjson.hbjson",
-            mime="application/json"
-        )
-
-
-
-with st.form('daylight-factor-job'):
-
-    st.markdown('Pollination credentials')
-    api_key = st.text_input(
-        'Enter Pollination API key', type='password')
-    owner = st.text_input('Project Owner')
-    st.markdown('---')
-
-    st.markdown('Job inputs')
-    project = st.text_input('Project Name')
-    job_name = st.text_input('Job Name')
-    job_description = st.text_input('Job Description')
-    st.markdown('---')
-
-    st.markdown('Recipe selection')
-    recipe_owner = st.text_input('Recipe Owner', value='ladybug-tools')
-    recipe_name = st.text_input('Recipe Name', value='daylight-factor')
-    recipe_tag = st.text_input('Recipe Version', value='latest')
-    st.markdown('---')
-
-    st.markdown('Recipe inputs')
-    # TODO: This will change based on the recipe you select
-    cpu_count = st.number_input('CPU Count', value=50)
-    grid_filter = st.text_input('Grid Filter', value='*')
-    min_sensor_count = st.number_input('Min Sensor Count', value=200)
-    #hbjson_data = st.file_uploader('Upload HBJSON')
-    rad_parameters = st.text_input('Rad Parameters',
-                                   value='-ab 2 -aa 0.1 -ad 2048 -ar 64')
-    # TODO: change ends
-
-    submit_button = st.form_submit_button(
-        label='Submit')
-
-    if submit_button:
-        # create HBJSON file path
-        hbjson_file = Path('.', 'model.hbjson')
-        # write HBJSON file
-        hbjson_file.write_bytes(hbjson_string.encode('utf-8'))
-
-        # recipe inputs
-        # TODO: This will change based on the recipe you select
-        arguments = {
-            'cpu-count': cpu_count,
-            'grid-filter': grid_filter,
-            'min-sensor-count': min_sensor_count,
-            'radiance-parameters': rad_parameters,
-        }
-
-        # recipe inputs where a file needs to be uploaded
-        artifacts = {
-            'model': {'file_path': hbjson_file, 'pollination_target_path': ''}
-        }
-        # TODO: change ends
-
-        api_client = ApiClient(api_token=api_key)
-        recipe = Recipe(recipe_owner, recipe_name, recipe_tag, api_client)
-        new_job = NewJob(owner, project, recipe, name=job_name,
-                         description=job_description, client=api_client)
-        new_job = add_recipe_to_job(new_job, arguments, artifacts)
-        job = new_job.create()
+if not access_code:
+    # Verify the app with the challenge
+    st.write("Verifying the App with the challenge string")
+    verify_url="https://speckle.xyz/authn/verify/"+appID+"/"+challenge
+    st.write("Click this to Verify:", verify_url)
+else:
+    st.write('Found challenge string stored locally: ', challenge)
+    st.write('Found access code stored locally: ', access_code)
+    st.write("Attempting to get token from access code and challenge")
+    if not token or not refreshToken:
+        tokens = requests.post(
+                url=f"https://speckle.xyz/auth/token",
+                json={
+                    "appSecret": appSecret,
+                    "appId": appID,
+                    "accessCode": access_code,
+                    "challenge": challenge,
+                },
+            )
+        token = tokens.json()['token']
+        refresh_token = tokens.json()['refreshToken']
+        st.session_state['token'] = token
+        st.session_state['refresh_token'] = refresh_token
+    st.write('TOKEN: ', token)
+    if token:
+        account = get_account_from_token("speckle.xyz", token)
+        st.write("ACCOUNT", account)
+        client = SpeckleClient(host="speckle.xyz")
+        client.authenticate_with_token(token)
+        try:
+            streams = getStreams(client)
+        except:
+            account = get_account_from_token("speckle.xyz", refresh_token)
+            st.write("ACCOUNT", account)
+            client = SpeckleClient(host="speckle.xyz")
+            client.authenticate_with_token(refresh_token)
+            streams = getStreams(client)
+        stream_names = ["Select a stream"]
+        for aStream in streams:
+            stream_names.append(aStream.name)
+        option = st.selectbox(
+            'Select A Stream',
+            (stream_names))
+        if option != "Select a stream":
+            stream = streams[stream_names.index(option)-1]
+            st.write(option)
+            st.subheader("Preview Image")
+            st.components.v1.iframe(src="https://speckle.xyz/preview/"+stream.id, width=250,height=250)
+            st.components.v1.iframe(src="https://speckle.xyz/embed?stream="+stream.id+"&transparent=false", width=400,height=600)
+    else:
+        st.write("Process Failed. Could not get account")
