@@ -60,8 +60,12 @@ def add_recipe_to_job(new_job, recipe_arguments, recipe_artifacts) -> NewJob:
     #topologies = TopologyByImportedJSONMK1.processItem(building_json_file)
     #building = topologies[0]
 
-st.write("Topology:",st.session_state['topology'])
-building = st.session_state['topology']
+
+building = st.session_state['Building']
+apertureCluster = st.session_state['Apertures']
+st.write("Building:",building)
+st.write("Apertures:",apertures)
+
 shadingCluster = None
 if building:
     hbmodel = HBModelByTopology.processItem(tpBuilding=building,
