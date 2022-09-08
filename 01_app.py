@@ -251,10 +251,11 @@ if 'challenge' not in st.session_state:
     st.session_state['challenge'] = None
 
 challenge = st.session_state['challenge']
+st.write("Challenge:", challenge)
 if not challenge:
     challenge = createRandomChallenge(length=12)
     st.session_state['challenge'] = challenge
-
+st.write("Challenge:", challenge)
 if 'token' not in st.session_state:
     st.session_state['token'] = None
 token = st.session_state['token']
