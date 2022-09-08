@@ -51,6 +51,8 @@ from specklepy.logging.exceptions import SpeckleException
 from specklepy.objects.other import RenderMaterial
 
 import topologic
+import datetime
+
 #--------------------------
 
 #--------------------------
@@ -246,19 +248,6 @@ with header:
 
 appID = st.secrets["appID"]
 appSecret = st.secrets["appSecret"]
-# This allows us to store variables locally
-if 'challenge' not in st.session_state:
-    st.session_state['challenge'] = None
-
-try:
-    challenge = st.secrets['challenge']
-except:
-    challenge = None
-st.write("Challenge:", challenge)
-if not challenge:
-    challenge = createRandomChallenge(length=12)
-    st.session_state['challenge'] = challenge
-    st.secrets["challenge"] = challenge
 
 if 'access_code' not in st.session_state:
     st.session_state['access_code'] = None
@@ -282,12 +271,12 @@ refresh_token = st.session_state['refresh_token']
 
 if not access_code:
     # Verify the app with the challenge
-    verify_url="https://speckle.xyz/authn/verify/"+appID+"/"+challenge
+    verify_url="https://speckle.xyz/authn/verify/"+appID+"/"+st.secrets["challenge"]
     st.image("https://speckle.systems/content/images/2021/02/logo_big.png",width=100)
     link = '[Login to Speckle]('+verify_url+')'
     st.subheader(link)
 else:
-    st.write('Challenge: ', st.session_state['challenge'])
+    st.write('Challenge: ', st.secrets["challenge"])
     st.write('Access Code: ', access_code)
     st.write('Token', token)
     st.write('Refresh Token', refresh_token)
@@ -299,7 +288,7 @@ else:
                     "appSecret": appSecret,
                     "appId": appID,
                     "accessCode": access_code,
-                    "challenge": st.session_state['challenge'],
+                    "challenge": st.secrets["challenge"],
                 },
             )
         st.write("Response", response)
