@@ -275,7 +275,6 @@ except:
 
 if not access_code:
     # Verify the app with the challenge
-    st.write("Verifying the App with the challenge string")
     verify_url="https://speckle.xyz/authn/verify/"+appID+"/"+challenge
     st.image("https://speckle.systems/content/images/2021/02/logo_big.png",width=100)
     link = '[Login to Speckle]('+verify_url+')'
