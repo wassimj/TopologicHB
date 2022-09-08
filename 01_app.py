@@ -255,7 +255,6 @@ try:
 except:
     access_code = None
 
-st.write("Challenge:", challenge)
 if 'token' not in st.session_state:
     st.session_state['token'] = None
 token = st.session_state['token']
