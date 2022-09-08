@@ -237,7 +237,11 @@ authenticate = st.container()
 #HEADER
 #Page Header
 with header:
-    st.title("Topologic Speckle Testing App📈")
+    icon_column, title_column = st.columns([1,10], gap="small")
+    with icon_column:
+        st.image("https://topologic.app/wp-content/uploads/2018/10/Topologic-Logo-250x250.png",width=100)
+    with title_column:
+        st.title("Topologic <> Speckle Test App")
 #--------------------------
 
 appID = st.secrets["appID"]
