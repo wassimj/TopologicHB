@@ -318,5 +318,40 @@ if isinstance(streams, list):
             (stream_names))
         if option != "Select a stream":
             stream = streams[stream_names.index(option)-1]
+
+            branches = getBranches([client, stream])
+            branch_names = ["Select a branch"]
+            for aBranch in branches:
+                branch_names.append(aBranch.name)
+
+            option = st.selectbox(
+                'Select A Branch',
+                (branch_names))
+            if option != "Select a branch":
+                branch = branches[branch_names.index(option)-1]
+                
+                commits = getCommits(branch)
+                commit_names = ["Select a commit"]
+                for aCommit in commits:
+                    commit_names.append(str(aCommit.id)+": "+aCommit.message)
+                option = st.selectbox('Select A Commit', (commit_names))
+                if option != "Select a commit":
+                    commit = commits[commit_names.index(option)-1]
+                    last_obj = getObject(client, stream, commit)
+                    st.write(last_obj)
+                    sp_vertices = last_obj.vertices
+                    sp_faces = last_obj.faces
+
+
+
+
+
+
+
+
+
+
+
+            stream = streams[stream_names.index(option)-1]
             st.components.v1.iframe(src="https://speckle.xyz/embed?stream="+stream.id+"&transparent=false", width=400,height=600)
        
