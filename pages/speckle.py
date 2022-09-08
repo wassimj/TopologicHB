@@ -10,19 +10,6 @@ import streamlit as st
 from specklepy.api.client import SpeckleClient
 from specklepy.api.credentials import get_account_from_token
 
-# import topologic
-# This requires some checking of the used OS platform to load the correct version of Topologic
-import sys
-import os
-from sys import platform
-if platform == 'win32':
-    os_name = 'windows'
-else:
-    os_name = 'linux'
-sitePackagesFolderName = os.path.join(os.path.dirname(os.path.realpath(__file__)), "bin", os_name)
-topologicFolderName = [filename for filename in os.listdir(sitePackagesFolderName) if filename.startswith("topologic")][0]
-topologicPath = os.path.join(sitePackagesFolderName, topologicFolderName)
-sys.path.append(topologicPath)
 import topologic
 #--------------------------
 
