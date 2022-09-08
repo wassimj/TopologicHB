@@ -328,17 +328,18 @@ if st.session_state['refresh_token']:
         except:
             st.write("ERROR: Failed to get Streams")
             streams = None
-if streams:
-    stream_names = ["Select a stream"]
-    for aStream in streams:
-        stream_names.append(aStream.name)
-    option = st.selectbox(
-        'Select A Stream',
-        (stream_names))
-    if option != "Select a stream":
-        stream = streams[stream_names.index(option)-1]
-        st.write(option)
-        st.subheader("Preview Image")
-        st.components.v1.iframe(src="https://speckle.xyz/preview/"+stream.id, width=250,height=250)
-        st.components.v1.iframe(src="https://speckle.xyz/embed?stream="+stream.id+"&transparent=false", width=400,height=600)
+if isinstance(streams, list):
+    if len(streams) > 0:
+        stream_names = ["Select a stream"]
+        for aStream in streams:
+            stream_names.append(aStream.name)
+        option = st.selectbox(
+            'Select A Stream',
+            (stream_names))
+        if option != "Select a stream":
+            stream = streams[stream_names.index(option)-1]
+            st.write(option)
+            st.subheader("Preview Image")
+            st.components.v1.iframe(src="https://speckle.xyz/preview/"+stream.id, width=250,height=250)
+            st.components.v1.iframe(src="https://speckle.xyz/embed?stream="+stream.id+"&transparent=false", width=400,height=600)
        
