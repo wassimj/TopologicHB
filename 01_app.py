@@ -253,7 +253,7 @@ if 'challenge' not in st.session_state:
 challenge = st.session_state['challenge']
 if not challenge:
     challenge = createRandomChallenge()
-    st.session_state['challenge'] = None
+    st.session_state['challenge'] = challenge
 
 if 'access_code' not in st.session_state:
     st.session_state['access_code'] = None
@@ -282,8 +282,6 @@ if not access_code:
 else:
     st.write('Challenge: ', challenge)
     st.write('Access Code: ', access_code)
-    st.write('appSecret: ', appSecret)
-    st.write('appID: ', appID)
     st.write('Token', token)
     st.write('Refresh Token', refresh_token)
     if not token or not refresh_token:
