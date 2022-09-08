@@ -317,7 +317,7 @@ if isinstance(streams, list):
         type_names = ["Select a type", "Building", "Apertures"]
         option = st.selectbox(
             'Select A Type',
-            type_names
+            type_names)
         if option != "Select a type":
             commit_type = option
             stream_names = ["Select a stream"]
