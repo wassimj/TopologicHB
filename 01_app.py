@@ -263,8 +263,6 @@ except:
     access_code = None
     st.session_state['access_code'] = None
 
-st.write("Access Code:", access_code)
-
 token = st.session_state['token']
 refresh_token = st.session_state['refresh_token']
 
@@ -310,16 +308,13 @@ if st.session_state['refresh_token']:
         streams = None
     st.write(streams)
     if not isinstance(streams, list):
-        st.write(streams)
-        st.write("Using the Refresh Token")
         account = get_account_from_token("speckle.xyz", refresh_token)
-        st.write("Account:", account)
         client = SpeckleClient(host="speckle.xyz")
         client.authenticate_with_token(refresh_token)
         try:
             streams = getStreams(client)
         except:
-            streams = NOne
+            streams = None
         st.write(streams)
 if isinstance(streams, list):
     if len(streams) > 0:
@@ -331,8 +326,5 @@ if isinstance(streams, list):
             (stream_names))
         if option != "Select a stream":
             stream = streams[stream_names.index(option)-1]
-            st.write(option)
-            st.subheader("Preview Image")
-            st.components.v1.iframe(src="https://speckle.xyz/preview/"+stream.id, width=250,height=250)
             st.components.v1.iframe(src="https://speckle.xyz/embed?stream="+stream.id+"&transparent=false", width=400,height=600)
        
