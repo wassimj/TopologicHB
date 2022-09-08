@@ -311,12 +311,15 @@ if st.session_state['refresh_token']:
     client.authenticate_with_token(token)
     try:
         streams = getStreams(client)
+        st.write(streams)
     except:
+        st.write("Using the Refresh Token")
         account = get_account_from_token("speckle.xyz", refresh_token)
         st.write("ACCOUNT", account)
         client = SpeckleClient(host="speckle.xyz")
         client.authenticate_with_token(refresh_token)
         streams = getStreams(client)
+        st.write(streams)
     stream_names = ["Select a stream"]
     for aStream in streams:
         stream_names.append(aStream.name)
