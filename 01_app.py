@@ -256,7 +256,6 @@ if 'access_code' not in st.session_state:
     st.session_state['access_code'] = None
 access_code = st.session_state['access_code']
 
-st.write("Access Code:", access_code)
 if 'token' not in st.session_state:
     st.session_state['token'] = None
 token = st.session_state['token']
