@@ -28,8 +28,6 @@ with icon_column:
 with title_column:
     st.title("Topologic <> Pollination Test App")
 
-st.write("Challenge:",challenge)
-
 def add_recipe_to_job(new_job, recipe_arguments, recipe_artifacts) -> NewJob:
     """Add recipe arguments and artifacts to a job.
 
@@ -54,13 +52,16 @@ def add_recipe_to_job(new_job, recipe_arguments, recipe_artifacts) -> NewJob:
 
     return new_job
 
-building_json_file = st.file_uploader("Upload Building", type="json", accept_multiple_files=False)
+#building_json_file = st.file_uploader("Upload Building", type="json", accept_multiple_files=False)
 
-building = None
-shadingCluster = None
-if building_json_file:
-    topologies = TopologyByImportedJSONMK1.processItem(building_json_file)
-    building = topologies[0]
+#building = None
+#shadingCluster = None
+i#f building_json_file:
+    #topologies = TopologyByImportedJSONMK1.processItem(building_json_file)
+    #building = topologies[0]
+
+st.write("Topology:",st.session_state['topology'])
+building = st.session_state['topology']
 
 if building:
     hbmodel = HBModelByTopology.processItem(tpBuilding=building,

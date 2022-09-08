@@ -255,7 +255,8 @@ if 'token' not in st.session_state:
     st.session_state['token'] = None
 if 'refresh_token' not in st.session_state:
     st.session_state['refresh_token'] = None
-
+if 'topology' not in st.session_state:
+    st.session_state['topology'] = None
 try:
      access_code = st.experimental_get_query_params()['access_code'][0]
      st.session_state['access_code'] = access_code
@@ -343,7 +344,42 @@ if isinstance(streams, list):
                     st.write(last_obj)
                     sp_vertices = last_obj.vertices
                     sp_faces = last_obj.faces
-
+                    tp_vertices = []
+                    for i in range(0,len(sp_vertices),3):
+                        x = sp_vertices[i]
+                        y = sp_vertices[i+1]
+                        z = sp_vertices[i+2]
+                        tp_vertices.append(topologic.Vertex.ByCoordinates(x,y,z))
+                    
+                    tp_faces = []
+                    i = 0
+                    while True:
+                        if sp_faces[i] == 0:
+                            n = 3
+                        else:
+                            n = 4
+                        temp_verts = []
+                        for j in range(n):
+                            temp_verts.append(tp_vertices[sp_faces[i+j+1]])
+                        c = topologic.Cluster.ByTopologies(temp_verts)
+                        w = wireByVertices([c, True])
+                        f = topologic.Face.ByExternalBoundary(w)
+                        tp_faces.append(f)
+                        i = i + n + 1
+                        if i+n+1 > len(sp_faces):
+                            break
+                    if len(tp_faces) == 1:
+                        tp_object = tp_faces[0]
+                    else:
+                        tp_object = cellComplexByFaces([tp_faces, 0.0001])
+                        if not tp_object:
+                            tp_object = cellByFaces([tp_faces, 0.0001])
+                        if not tp_object:
+                            tp_object = shellByFaces([tp_faces, 0.0001])
+                        if not tp_object:
+                            tp_object = topologic.Cluster.ByTopologies(tp_faces)
+                    st.session_state['topology'] = tp_object
+                        
 
 
 
