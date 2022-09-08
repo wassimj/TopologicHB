@@ -265,12 +265,13 @@ if 'refresh_token' not in st.session_state:
     st.session_state['refresh_token'] = None
 refresh_token = st.session_state['refresh_token']
 
-st.write("Debugging Access Code:", st.experimental_get_query_params()['access_code'][0])
 try:
      access_code = st.experimental_get_query_params()['access_code'][0]
      st.session_state['access_code'] = access_code
 except:
     access_code = None
+
+st.write("Access Code", access_code)
 
 if not access_code:
     # Verify the app with the challenge
