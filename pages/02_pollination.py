@@ -62,7 +62,7 @@ def add_recipe_to_job(new_job, recipe_arguments, recipe_artifacts) -> NewJob:
 
 st.write("Topology:",st.session_state['topology'])
 building = st.session_state['topology']
-
+shadingCluster = None
 if building:
     hbmodel = HBModelByTopology.processItem(tpBuilding=building,
                     tpShadingFacesCluster=shadingCluster,
