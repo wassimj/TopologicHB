@@ -251,6 +251,10 @@ appSecret = st.secrets["appSecret"]
 
 if 'access_code' not in st.session_state:
     st.session_state['access_code'] = None
+if 'token' not in st.session_state:
+    st.session_state['token'] = None
+if 'refresh_token' not in st.session_state:
+    st.session_state['refresh_token'] = None
 
 try:
      access_code = st.experimental_get_query_params()['access_code'][0]
