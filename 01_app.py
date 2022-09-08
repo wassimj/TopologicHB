@@ -252,7 +252,7 @@ if 'challenge' not in st.session_state:
 
 challenge = st.session_state['challenge']
 if not challenge:
-    challenge = createRandomChallenge()
+    challenge = createRandomChallenge(length=12)
     st.session_state['challenge'] = challenge
 
 if 'token' not in st.session_state:
