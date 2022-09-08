@@ -337,7 +337,7 @@ if isinstance(streams, list):
                 option = st.selectbox('Select A Commit', (commit_names))
                 if option != "Select a commit":
                     commit = commits[commit_names.index(option)-1]
-                    st.components.v1.iframe(src="https://speckle.xyz/embed?stream="+stream.id+"/"+commit.id+"&transparent=false", width=600,height=400)
+                    st.components.v1.iframe(src="https://speckle.xyz/embed?stream="+stream.id+"&commit="+commit.id+"&transparent=false", width=600,height=400)
        
                     last_obj = getObject(client, stream, commit)
                     st.write(last_obj)
