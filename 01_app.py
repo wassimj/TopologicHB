@@ -292,6 +292,7 @@ else:
                     "challenge": challenge,
                 },
             )
+        st.write("Tokens", tokens)
         token = tokens.json()['token']
         refresh_token = tokens.json()['refreshToken']
         st.session_state['token'] = token
