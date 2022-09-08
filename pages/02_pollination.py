@@ -56,7 +56,7 @@ def add_recipe_to_job(new_job, recipe_arguments, recipe_artifacts) -> NewJob:
 
 #building = None
 #shadingCluster = None
-i#f building_json_file:
+#if building_json_file:
     #topologies = TopologyByImportedJSONMK1.processItem(building_json_file)
     #building = topologies[0]
 
