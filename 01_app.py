@@ -265,26 +265,17 @@ except:
 
 st.write("Access Code:", access_code)
 
-if 'token' not in st.session_state:
-    st.session_state['token'] = None
 token = st.session_state['token']
-
-if 'refresh_token' not in st.session_state:
-    st.session_state['refresh_token'] = None
 refresh_token = st.session_state['refresh_token']
 
-if not access_code:
-    # Verify the app with the challenge
-    verify_url="https://speckle.xyz/authn/verify/"+appID+"/"+st.secrets["challenge"]
-    st.image("https://speckle.systems/content/images/2021/02/logo_big.png",width=100)
-    link = '[Login to Speckle]('+verify_url+')'
-    st.subheader(link)
-else:
-    st.write('Challenge: ', st.secrets["challenge"])
-    st.write('Access Code: ', access_code)
-    st.write('Token', token)
-    st.write('Refresh Token', refresh_token)
-    if not token or not refresh_token:
+if not refresh_token:
+    if not access_code:
+        # Verify the app with the challenge
+        verify_url="https://speckle.xyz/authn/verify/"+appID+"/"+st.secrets["challenge"]
+        st.image("https://speckle.systems/content/images/2021/02/logo_big.png",width=100)
+        link = '[Login to Speckle]('+verify_url+')'
+        st.subheader(link)
+    else:
         st.write("Attempting to get token from access code and challenge")
         response = requests.post(
                 url=f"https://speckle.xyz/auth/token",
@@ -313,7 +304,11 @@ if st.session_state['refresh_token']:
     st.write("Account:", account)
     client = SpeckleClient(host="speckle.xyz")
     client.authenticate_with_token(token)
-    streams = getStreams(client)
+    try:
+        streams = getStreams(client)
+    except:
+        streams = None
+    st.write(streams)
     if not isinstance(streams, list):
         st.write(streams)
         st.write("Using the Refresh Token")
@@ -321,7 +316,10 @@ if st.session_state['refresh_token']:
         st.write("Account:", account)
         client = SpeckleClient(host="speckle.xyz")
         client.authenticate_with_token(refresh_token)
-        streams = getStreams(client)
+        try:
+            streams = getStreams(client)
+        except:
+            streams = NOne
         st.write(streams)
 if isinstance(streams, list):
     if len(streams) > 0:
