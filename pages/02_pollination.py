@@ -64,7 +64,7 @@ def add_recipe_to_job(new_job, recipe_arguments, recipe_artifacts) -> NewJob:
 building = st.session_state['Building']
 apertureCluster = st.session_state['Apertures']
 st.write("Building:",building)
-st.write("Apertures:",apertures)
+st.write("Apertures:",apertureCluster)
 
 shadingCluster = None
 if building:
