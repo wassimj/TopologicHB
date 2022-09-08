@@ -306,6 +306,7 @@ else:
         else:
             st.write("Error occurred : " ,response.status_code, response.text)
 
+streams = None
 if st.session_state['refresh_token']:
     st.write("Using the Token")
     account = get_account_from_token("speckle.xyz", token)
