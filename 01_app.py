@@ -299,13 +299,13 @@ else:
                 },
             )
         st.write("Response", response)
-        if (response.json()["code"] == 200):
+        if (response.status_code == 200):
             token = response.json()['token']
             refresh_token = response.json()['refreshToken']
             st.session_state['token'] = token
             st.session_state['refresh_token'] = refresh_token
-        elif response["code"] != 200:
-            st.write("Error occurred : " ,response.json()["code"], response.json()["message"])
+        else:
+            st.write("Error occurred : " ,response.status_code, response.text])
     else:
         account = get_account_from_token("speckle.xyz", token)
         st.write("Account:", account)
