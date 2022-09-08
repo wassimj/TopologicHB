@@ -250,10 +250,22 @@ appSecret = st.secrets["appSecret"]
 if 'challenge' not in st.session_state:
     st.session_state['challenge'] = None
 
+challenge = st.session_state['challenge']
+st.write("Challenge:", challenge)
+if not challenge:
+    challenge = createRandomChallenge(length=12)
+    st.session_state['challenge'] = challenge
+
+if 'access_code' not in st.session_state:
+    st.session_state['access_code'] = None
+
+st.write("Access Code:", access_code)
 try:
      access_code = st.experimental_get_query_params()['access_code'][0]
+     st.session_state['access_code'] = access_code
 except:
     access_code = None
+    st.session_state['access_code'] = None
 
 if 'token' not in st.session_state:
     st.session_state['token'] = None
@@ -264,11 +276,6 @@ if 'refresh_token' not in st.session_state:
 refresh_token = st.session_state['refresh_token']
 
 if not access_code:
-    challenge = st.session_state['challenge']
-    st.write("Challenge:", challenge)
-    if not challenge:
-        challenge = createRandomChallenge(length=12)
-        st.session_state['challenge'] = challenge
     # Verify the app with the challenge
     verify_url="https://speckle.xyz/authn/verify/"+appID+"/"+challenge
     st.image("https://speckle.systems/content/images/2021/02/logo_big.png",width=100)
