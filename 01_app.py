@@ -255,7 +255,6 @@ if not challenge:
     challenge = createRandomChallenge()
     st.session_state['challenge'] = None
 
-st.write("Challenge:", challenge)
 if 'access_code' not in st.session_state:
     st.session_state['access_code'] = None
 access_code = st.session_state['access_code']
@@ -278,10 +277,9 @@ if not access_code:
     # Verify the app with the challenge
     st.write("Verifying the App with the challenge string")
     verify_url="https://speckle.xyz/authn/verify/"+appID+"/"+challenge
-    logo = '![Speckle Logo](https://speckle.systems/content/images/2021/02/logo_big.png "Speckle Logo")'
+    st.image("https://speckle.systems/content/images/2021/02/logo_big.png",width=100)
     link = '[Login to Speckle]('+verify_url+')'
-    st.markdown(logo, unsafe_allow_html=True)
-    st.markdown(link, unsafe_allow_html=True)
+    st.subheader(link)
 else:
     st.write('Challenge: ', challenge)
     st.write('Access Code: ', access_code)
