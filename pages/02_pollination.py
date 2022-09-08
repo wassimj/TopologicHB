@@ -66,11 +66,7 @@ apertureCluster = st.session_state['Apertures']
 st.write("Building:",building)
 st.write("Apertures:",apertureCluster)
 
-new_building = TopologyAddApertures.processItem(topology = building,
-	                                        apertureCluster = apertureCluster,
-	                                        exclusive = True,
-	                                        tolerance = 0.0001,
-	                                        subTopologyType = "Face")
+new_building = TopologyAddApertures.processItem([building, apertureCluster, True, 0.0001, "Face"])
 st.write("New Building:", new_building)
 shadingCluster = None
 if new_building:
