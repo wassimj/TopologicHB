@@ -310,31 +310,34 @@ if st.session_state['refresh_token']:
     st.write("Using the Token")
     account = get_account_from_token("speckle.xyz", token)
     st.write("Account:", account)
-    client = SpeckleClient(host="speckle.xyz")
-    client.authenticate_with_token(token)
     try:
+        client = SpeckleClient(host="speckle.xyz")
+        client.authenticate_with_token(token)
         streams = getStreams(client)
         st.write(streams)
     except:
         st.write("Using the Refresh Token")
         account = get_account_from_token("speckle.xyz", refresh_token)
         st.write("Account:", account)
-        client = SpeckleClient(host="speckle.xyz")
-        client.authenticate_with_token(refresh_token)
         try:
+            client = SpeckleClient(host="speckle.xyz")
+            client.authenticate_with_token(refresh_token)
             streams = getStreams(client)
             st.write(streams)
-            stream_names = ["Select a stream"]
-            for aStream in streams:
-                stream_names.append(aStream.name)
-            option = st.selectbox(
-                'Select A Stream',
-                (stream_names))
-            if option != "Select a stream":
-                stream = streams[stream_names.index(option)-1]
-                st.write(option)
-                st.subheader("Preview Image")
-                st.components.v1.iframe(src="https://speckle.xyz/preview/"+stream.id, width=250,height=250)
-                st.components.v1.iframe(src="https://speckle.xyz/embed?stream="+stream.id+"&transparent=false", width=400,height=600)
         except:
             st.write("ERROR: Failed to get Streams")
+            streams = None
+if streams:
+    stream_names = ["Select a stream"]
+    for aStream in streams:
+        stream_names.append(aStream.name)
+    option = st.selectbox(
+        'Select A Stream',
+        (stream_names))
+    if option != "Select a stream":
+        stream = streams[stream_names.index(option)-1]
+        st.write(option)
+        st.subheader("Preview Image")
+        st.components.v1.iframe(src="https://speckle.xyz/preview/"+stream.id, width=250,height=250)
+        st.components.v1.iframe(src="https://speckle.xyz/embed?stream="+stream.id+"&transparent=false", width=400,height=600)
+       
