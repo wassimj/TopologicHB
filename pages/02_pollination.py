@@ -13,7 +13,7 @@ from pollination_streamlit.interactors import NewJob, Recipe
 
 import topologic
 
-from topologicpy import TopologyByImportedJSONMK1, HBModelByTopology
+from topologicpy import TopologyByImportedJSONMK1, HBModelByTopology, TopologyAddApertures
 #--------------------------
 #--------------------------
 # PAGE CONFIGURATION
@@ -66,9 +66,15 @@ apertureCluster = st.session_state['Apertures']
 st.write("Building:",building)
 st.write("Apertures:",apertureCluster)
 
+new_building = TopologyAddApertures.processItem(topology = building,
+	                                        apertureCluster = apertureCluster,
+	                                        exclusive = True,
+	                                        tolerance = 0.0001,
+	                                        subTopologyType = "Face")
+st.write("New Building:", new_building)
 shadingCluster = None
-if building:
-    hbmodel = HBModelByTopology.processItem(tpBuilding=building,
+if new_building:
+    hbmodel = HBModelByTopology.processItem(tpBuilding=new_building,
                     tpShadingFacesCluster=shadingCluster,
                     buildingName = "Generic_Building",
                     defaultProgramIdentifier = "Generic Office Program",
