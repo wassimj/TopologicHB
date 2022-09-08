@@ -250,11 +250,15 @@ appSecret = st.secrets["appSecret"]
 if 'challenge' not in st.session_state:
     st.session_state['challenge'] = None
 
-challenge = st.session_state['challenge']
+try:
+    challenge = st.secrets['challenge']
+except:
+    challenge = None
 st.write("Challenge:", challenge)
 if not challenge:
     challenge = createRandomChallenge(length=12)
     st.session_state['challenge'] = challenge
+    st.secrets["challenge"] = challenge
 
 if 'access_code' not in st.session_state:
     st.session_state['access_code'] = None
