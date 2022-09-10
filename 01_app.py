@@ -51,7 +51,7 @@ from specklepy.logging.exceptions import SpeckleException
 from specklepy.objects.other import RenderMaterial
 
 from topologicpy import HBModelByTopology, TopologyAddApertures
-
+import json
 
 #--------------------------
 
@@ -419,6 +419,7 @@ if building and apertureCluster and isinstance(building, topologic.CellComplex) 
                 mime="application/json"
             )
         st.session_state['hbjson'] = hbjson_string
+        st.write("DONE, you can now go on to the next page")
 
 
 
