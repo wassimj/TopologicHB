@@ -9,4 +9,3 @@ pollination-streamlit-viewer>=0.4.5
 pollination-streamlit-io>=0.42.2
 pollination-honeybee-vtk
 specklepy
-zipfile
