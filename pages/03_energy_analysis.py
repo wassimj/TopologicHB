@@ -95,9 +95,9 @@ with st.form('energy-analysis'):
     ddy_file = st.file_uploader('Upload DDY File', type="ddy")
 
     if epw_file:
-        epw = epw_file.read(epw)
+        epw = epw_file.read()
     if ddy_file:
-        ddy = epw_file.read(epw)
+        ddy = ddy_file.read()
     # TODO: change ends
 
     submit_button = st.form_submit_button(
