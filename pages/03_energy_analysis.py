@@ -18,7 +18,7 @@ from topologicpy import TopologyByImportedJSONMK1, HBModelByTopology, TopologyAd
 #--------------------------
 # PAGE CONFIGURATION
 st.set_page_config(
-    page_title="Topologic Energy Analysis Test Application",
+    page_title="Topologic HBJSON Test Application",
     page_icon="📊",
     layout="wide"
 )
@@ -61,38 +61,13 @@ def add_recipe_to_job(new_job, recipe_arguments, recipe_artifacts) -> NewJob:
     #building = topologies[0]
 
 
-building = st.session_state['Building']
-apertureCluster = st.session_state['Apertures']
-st.write("Building:",building)
-st.write("Apertures:",apertureCluster)
 
-if building and apertureCluster:
-    new_building = TopologyAddApertures.processItem([building, apertureCluster, True, 0.0001, "Face"])
-    st.write("New Building:", new_building)
-    shadingCluster = None
-    if new_building:
-        hbmodel = HBModelByTopology.processItem(tpBuilding=new_building,
-                        tpShadingFacesCluster=shadingCluster,
-                        buildingName = "Generic_Building",
-                        defaultProgramIdentifier = "Generic Office Program",
-                        defaultConstructionSetIdentifier = "Default Generic Construction Set",
-                        coolingSetpoint = 25.0,
-                        heatingSetpoint = 20.0,
-                        humidifyingSetpoint = 30.0,
-                        dehumidifyingSetpoint = 55.0,
-                        roomNameKey = "Name",
-                        roomTypeKey = "Type")
+hbjson_string = st.session_state['hbjson']
+    
 
-        hbjson_string = json.dumps(hbmodel.to_dict())
-        btn = st.download_button(
-                label="Download HBJSON file",
-                data=hbjson_string,
-                file_name="topologic_hbjson.hbjson",
-                mime="application/json"
-            )
-        st.session_state['hbjson'] = hbjson_string
 
-with st.form('daylight-factor-job'):
+
+with st.form('energy-analysis'):
 
     st.markdown('Pollination credentials')
     api_key = st.text_input(
@@ -108,18 +83,14 @@ with st.form('daylight-factor-job'):
 
     st.markdown('Recipe selection')
     recipe_owner = st.text_input('Recipe Owner', value='ladybug-tools')
-    recipe_name = st.text_input('Recipe Name', value='daylight-factor')
+    recipe_name = st.text_input('Recipe Name', value='custom-energy-sim')
     recipe_tag = st.text_input('Recipe Version', value='latest')
     st.markdown('---')
 
     st.markdown('Recipe inputs')
-    # TODO: This will change based on the recipe you select
-    cpu_count = st.number_input('CPU Count', value=50)
-    grid_filter = st.text_input('Grid Filter', value='*')
-    min_sensor_count = st.number_input('Min Sensor Count', value=200)
-    #hbjson_data = st.file_uploader('Upload HBJSON')
-    rad_parameters = st.text_input('Rad Parameters',
-                                   value='-ab 2 -aa 0.1 -ad 2048 -ar 64')
+
+    epw = st.file_uploader('Upload EPW File')
+    ddy = st.file_uploader('Upload DDY File')
     # TODO: change ends
 
     submit_button = st.form_submit_button(
@@ -134,10 +105,8 @@ with st.form('daylight-factor-job'):
         # recipe inputs
         # TODO: This will change based on the recipe you select
         arguments = {
-            'cpu-count': cpu_count,
-            'grid-filter': grid_filter,
-            'min-sensor-count': min_sensor_count,
-            'radiance-parameters': rad_parameters,
+            'ddy': ddy,
+            'epw': epw,
         }
 
         # recipe inputs where a file needs to be uploaded
