@@ -50,8 +50,8 @@ from specklepy.objects.geometry import *
 from specklepy.logging.exceptions import SpeckleException
 from specklepy.objects.other import RenderMaterial
 
-import topologic
-import datetime
+from topologicpy import HBModelByTopology, TopologyAddApertures
+
 
 #--------------------------
 
@@ -391,8 +391,34 @@ if isinstance(streams, list):
                                 tp_object = topologic.Cluster.ByTopologies(tp_faces)
                         st.session_state[commit_type] = tp_object
                         
+building = st.session_state['Building']
+apertureCluster = st.session_state['Apertures']
 
+if building and apertureCluster and isinstance(building, topologic.CellComplex) and isinstance(apertureCluster, topologic.Cluster):
+    new_building = TopologyAddApertures.processItem([building, apertureCluster, True, 0.0001, "Face"])
+    st.write("New Building:", new_building)
+    shadingCluster = None
+    if new_building:
+        hbmodel = HBModelByTopology.processItem(tpBuilding=new_building,
+                        tpShadingFacesCluster=shadingCluster,
+                        buildingName = "Generic_Building",
+                        defaultProgramIdentifier = "Generic Office Program",
+                        defaultConstructionSetIdentifier = "Default Generic Construction Set",
+                        coolingSetpoint = 25.0,
+                        heatingSetpoint = 20.0,
+                        humidifyingSetpoint = 30.0,
+                        dehumidifyingSetpoint = 55.0,
+                        roomNameKey = "Name",
+                        roomTypeKey = "Type")
 
+        hbjson_string = json.dumps(hbmodel.to_dict())
+        btn = st.download_button(
+                label="Download HBJSON file",
+                data=hbjson_string,
+                file_name="topologic_hbjson.hbjson",
+                mime="application/json"
+            )
+        st.session_state['hbjson'] = hbjson_string
 
 
 

@@ -13,7 +13,6 @@ from pollination_streamlit.interactors import NewJob, Recipe
 
 import topologic
 
-from topologicpy import TopologyByImportedJSONMK1, HBModelByTopology, TopologyAddApertures
 #--------------------------
 #--------------------------
 # PAGE CONFIGURATION
@@ -52,45 +51,7 @@ def add_recipe_to_job(new_job, recipe_arguments, recipe_artifacts) -> NewJob:
 
     return new_job
 
-#building_json_file = st.file_uploader("Upload Building", type="json", accept_multiple_files=False)
-
-#building = None
-#shadingCluster = None
-#if building_json_file:
-    #topologies = TopologyByImportedJSONMK1.processItem(building_json_file)
-    #building = topologies[0]
-
-
-building = st.session_state['Building']
-apertureCluster = st.session_state['Apertures']
-st.write("Building:",building)
-st.write("Apertures:",apertureCluster)
-
-if building and apertureCluster:
-    new_building = TopologyAddApertures.processItem([building, apertureCluster, True, 0.0001, "Face"])
-    st.write("New Building:", new_building)
-    shadingCluster = None
-    if new_building:
-        hbmodel = HBModelByTopology.processItem(tpBuilding=new_building,
-                        tpShadingFacesCluster=shadingCluster,
-                        buildingName = "Generic_Building",
-                        defaultProgramIdentifier = "Generic Office Program",
-                        defaultConstructionSetIdentifier = "Default Generic Construction Set",
-                        coolingSetpoint = 25.0,
-                        heatingSetpoint = 20.0,
-                        humidifyingSetpoint = 30.0,
-                        dehumidifyingSetpoint = 55.0,
-                        roomNameKey = "Name",
-                        roomTypeKey = "Type")
-
-        hbjson_string = json.dumps(hbmodel.to_dict())
-        btn = st.download_button(
-                label="Download HBJSON file",
-                data=hbjson_string,
-                file_name="topologic_hbjson.hbjson",
-                mime="application/json"
-            )
-        st.session_state['hbjson'] = hbjson_string
+hbjson_string = st.session_state['hbjson']
 
 with st.form('daylight-factor-job'):
 
