@@ -95,9 +95,11 @@ with st.form('energy-analysis'):
     ddy_file = st.file_uploader('Upload DDY File', type="ddy")
 
     if epw_file:
-        epw = epw_file.read()
+        stringio = io.StringIO(epw_file.getvalue().decode("utf-8"))
+        epw = stringio.read()
     if ddy_file:
-        ddy = ddy_file.read()
+        stringio = io.StringIO(ddy_file.getvalue().decode("utf-8"))
+        ddy = stringio.read()
     # TODO: change ends
 
     submit_button = st.form_submit_button(
