@@ -127,13 +127,13 @@ if submitted and ddy_string and epw_string:
     # TODO: This will change based on the recipe you select
 
     arguments = {
-        'ddy': 'ddy',
-        'epw': 'epw',
+        'ddy': 'GBR_WAL_Cardiff.AP.037150_TMYx.2007-2021.ddy',
+        'epw': 'GBR_WAL_Cardiff.AP.037150_TMYx.2007-2021.epw',
     }
 
     # recipe inputs where a file needs to be uploaded
     artifacts = {
-        'model': {'file_path': hbjson_file, 'ddy': ddy_file, 'epw': epw_file, 'pollination_target_path': ''}
+        'model': {'file_path': hbjson_file, 'pollination_target_path': ''}
     }
     # TODO: change ends
 
