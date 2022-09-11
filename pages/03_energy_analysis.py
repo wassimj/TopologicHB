@@ -131,3 +131,4 @@ with st.form('energy-analysis'):
                          description=job_description, client=api_client)
         new_job = add_recipe_to_job(new_job, arguments, artifacts)
         job = new_job.create()
+        st.write("JOB", job)
