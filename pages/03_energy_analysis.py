@@ -119,10 +119,10 @@ with st.form('energy-analysis'):
         # recipe inputs
         # TODO: This will change based on the recipe you select
 
-        #arguments = {
+        arguments = {
             'ddy': ddy,
             'epw': epw,
-        #}
+        }
 
         # recipe inputs where a file needs to be uploaded
         artifacts = {
