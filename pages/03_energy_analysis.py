@@ -72,6 +72,7 @@ hbjson_string = st.session_state['hbjson']
     
 
 
+submitted = False
 
 with st.form('energy-analysis'):
 
@@ -107,10 +108,9 @@ with st.form('energy-analysis'):
         epw = stringByUploadedFile(epw_file)
         st.write(epw)
 
-    submit_button = st.form_submit_button(
-        label='Submit')
+    submitted = st.form_submit_button('Submit')
 
-    if submit_button and ddy_data and epw_data:
+    if submitted and ddy_data and epw_data:
         # create HBJSON file path
         hbjson_file = Path('.', 'model.hbjson')
         # write HBJSON file
@@ -133,7 +133,7 @@ with st.form('energy-analysis'):
         api_client = ApiClient(api_token=api_key)
         recipe = Recipe(recipe_owner, recipe_name, recipe_tag, api_client)
         new_job = NewJob(owner, project, recipe, name=job_name,
-                         description=job_description, client=api_client)
+                            description=job_description, client=api_client)
         new_job = add_recipe_to_job(new_job, arguments, artifacts)
         job = new_job.create()
         st.write("JOB", job)
