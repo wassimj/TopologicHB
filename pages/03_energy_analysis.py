@@ -106,8 +106,10 @@ with st.form('energy-analysis'):
 
 if ddy_uploaded_file:
     ddy_string = stringByUploadedFile(ddy_uploaded_file)
+    ddy_name = ddy_uploaded_file.name
 if epw_uploaded_file:
     epw_string = stringByUploadedFile(epw_uploaded_file)
+    epw_name = epw_uploaded_file.name
 if submitted and ddy_string and epw_string:
     # create HBJSON file path
     hbjson_file = Path('.', 'model.hbjson')
@@ -115,11 +117,11 @@ if submitted and ddy_string and epw_string:
     hbjson_file.write_bytes(hbjson_string.encode('utf-8'))
 
     # create DDY file path
-    ddy_file = Path('.', 'CARDIFF.ddy')
+    ddy_file = Path('.', ddy_name)
     # write DDY file
     ddy_file.write_bytes(ddy_string.encode('utf-8'))
     # create EPW file path
-    epw_file = Path('.', 'CARDIFF.epw')
+    epw_file = Path('.', epw_name)
     # write EPW file
     epw_file.write_bytes(epw_string.encode('utf-8'))
 
@@ -127,13 +129,15 @@ if submitted and ddy_string and epw_string:
     # TODO: This will change based on the recipe you select
 
     arguments = {
-        'ddy': 'GBR_WAL_Cardiff.AP.037150_TMYx.2007-2021.ddy',
-        'epw': 'GBR_WAL_Cardiff.AP.037150_TMYx.2007-2021.epw',
+        'ddy': ddy_name,
+        'epw': epw_name,
     }
 
     # recipe inputs where a file needs to be uploaded
     artifacts = {
         'model': {'file_path': hbjson_file, 'pollination_target_path': ''}
+        'ddy': {'file_path': ddy_file, 'pollination_target_path': ''}
+        'epw': {'file_path': epw_file, 'pollination_target_path': ''}
     }
     # TODO: change ends
 
