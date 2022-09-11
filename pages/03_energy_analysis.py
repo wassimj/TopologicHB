@@ -14,8 +14,14 @@ from pollination_streamlit.interactors import NewJob, Recipe
 import topologic
 
 from topologicpy import TopologyByImportedJSONMK1, HBModelByTopology, TopologyAddApertures
+
+from io import StringIO
 #--------------------------
 #--------------------------
+
+def stringByUploadedFile(uploaded_file):
+    return StringIO(uploaded_file.getvalue().decode("utf-8")).read()
+
 # PAGE CONFIGURATION
 st.set_page_config(
     page_title="Topologic HBJSON Test Application",
@@ -89,16 +95,17 @@ with st.form('energy-analysis'):
 
     st.markdown('Recipe inputs')
 
-    ddy_data = st.file_uploader('Upload DDY File', type="ddy")
-    epw_data = st.file_uploader('Upload EPW File', type="epw")
+    ddy_file = st.file_uploader('Upload DDY File', type="ddy")
+    epw_file = st.file_uploader('Upload EPW File', type="epw")
 
-    if ddy_data:
-        ddy_file = Path('.', 'weather.ddy')
-        ddy_file.write_bytes(ddy_data.getvalue())
-    
-    if epw_data:
-        epw_file = Path('.', 'weather.epw')
-        epw_file.write_bytes(epw_data.getvalue())
+    epw = None
+    ddy = None
+    if ddy_file:
+        ddy = stringByUploadedFile(ddy_file)
+        st.write(ddy)
+    if epw_file:
+        epw = stringByUploadedFile(epw_file)
+        st.write(epw)
 
     submit_button = st.form_submit_button(
         label='Submit')
@@ -111,15 +118,15 @@ with st.form('energy-analysis'):
 
         # recipe inputs
         # TODO: This will change based on the recipe you select
-        arguments = {}
+
         #arguments = {
-            #'ddy': ddy_file,
-            #'epw': epw_file,
+            'ddy': ddy,
+            'epw': epw,
         #}
 
         # recipe inputs where a file needs to be uploaded
         artifacts = {
-            'model': {'file_path': hbjson_file, 'ddy': ddy_file, 'epw': epw_file, 'pollination_target_path': ''}
+            'model': {'file_path': hbjson_file, 'pollination_target_path': ''}
         }
         # TODO: change ends
 
