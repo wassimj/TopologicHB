@@ -76,64 +76,64 @@ submitted = False
 
 with st.form('energy-analysis'):
 
-    st.markdown('Pollination credentials')
+    #st.markdown('Pollination credentials')
     api_key = st.text_input(
         'Enter Pollination API key', type='password')
     owner = st.text_input('Project Owner')
-    st.markdown('---')
+    #st.markdown('---')
 
     st.markdown('Job inputs')
     project = st.text_input('Project Name')
     job_name = st.text_input('Job Name')
     job_description = st.text_input('Job Description')
-    st.markdown('---')
+    #st.markdown('---')
 
     st.markdown('Recipe selection')
     recipe_owner = st.text_input('Recipe Owner', value='ladybug-tools')
     recipe_name = st.text_input('Recipe Name', value='custom-energy-sim')
     recipe_tag = st.text_input('Recipe Version', value='latest')
-    st.markdown('---')
+    #st.markdown('---')
 
-    st.markdown('Recipe inputs')
+    #st.markdown('Recipe inputs')
 
     ddy_file = st.file_uploader('Upload DDY File', type="ddy")
     epw_file = st.file_uploader('Upload EPW File', type="epw")
 
     epw = None
     ddy = None
-    if ddy_file:
-        ddy = stringByUploadedFile(ddy_file)
-        st.write(ddy)
-    if epw_file:
-        epw = stringByUploadedFile(epw_file)
-        st.write(epw)
 
     submitted = st.form_submit_button('Submit')
 
-    if submitted and ddy_data and epw_data:
-        # create HBJSON file path
-        hbjson_file = Path('.', 'model.hbjson')
-        # write HBJSON file
-        hbjson_file.write_bytes(hbjson_string.encode('utf-8'))
+if ddy_file:
+    ddy = stringByUploadedFile(ddy_file)
+    st.write(ddy)
+if epw_file:
+    epw = stringByUploadedFile(epw_file)
+    st.write(epw)
+if submitted and ddy_data and epw_data:
+    # create HBJSON file path
+    hbjson_file = Path('.', 'model.hbjson')
+    # write HBJSON file
+    hbjson_file.write_bytes(hbjson_string.encode('utf-8'))
 
-        # recipe inputs
-        # TODO: This will change based on the recipe you select
+    # recipe inputs
+    # TODO: This will change based on the recipe you select
 
-        arguments = {
-            'ddy': ddy,
-            'epw': epw,
-        }
+    arguments = {
+        'ddy': ddy,
+        'epw': epw,
+    }
 
-        # recipe inputs where a file needs to be uploaded
-        artifacts = {
-            'model': {'file_path': hbjson_file, 'pollination_target_path': ''}
-        }
-        # TODO: change ends
+    # recipe inputs where a file needs to be uploaded
+    artifacts = {
+        'model': {'file_path': hbjson_file, 'pollination_target_path': ''}
+    }
+    # TODO: change ends
 
-        api_client = ApiClient(api_token=api_key)
-        recipe = Recipe(recipe_owner, recipe_name, recipe_tag, api_client)
-        new_job = NewJob(owner, project, recipe, name=job_name,
-                            description=job_description, client=api_client)
-        new_job = add_recipe_to_job(new_job, arguments, artifacts)
-        job = new_job.create()
-        st.write("JOB", job)
+    api_client = ApiClient(api_token=api_key)
+    recipe = Recipe(recipe_owner, recipe_name, recipe_tag, api_client)
+    new_job = NewJob(owner, project, recipe, name=job_name,
+                        description=job_description, client=api_client)
+    new_job = add_recipe_to_job(new_job, arguments, artifacts)
+    job = new_job.create()
+    st.write("JOB", job)
