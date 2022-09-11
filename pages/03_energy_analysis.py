@@ -88,8 +88,6 @@ with st.form('energy-analysis'):
     st.markdown('---')
 
     st.markdown('Recipe inputs')
-    ddy = None
-    epw = None
 
     ddy_data = st.file_uploader('Upload DDY File', type="ddy")
     epw_data = st.file_uploader('Upload EPW File', type="epw")
@@ -105,7 +103,7 @@ with st.form('energy-analysis'):
     submit_button = st.form_submit_button(
         label='Submit')
 
-    if submit_button and ddy and epw:
+    if submit_button and ddy_data and epw_data:
         # create HBJSON file path
         hbjson_file = Path('.', 'model.hbjson')
         # write HBJSON file
