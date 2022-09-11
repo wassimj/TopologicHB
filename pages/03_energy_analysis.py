@@ -96,8 +96,8 @@ with st.form('energy-analysis'):
 
     #st.markdown('Recipe inputs')
 
-    ddy_file = st.file_uploader('Upload DDY File', type="ddy")
-    epw_file = st.file_uploader('Upload EPW File', type="epw")
+    ddy_file = st.file_uploader('Upload DDY File')
+    epw_file = st.file_uploader('Upload EPW File')
 
     epw = None
     ddy = None
