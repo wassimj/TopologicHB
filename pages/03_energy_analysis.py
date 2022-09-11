@@ -135,8 +135,8 @@ if submitted and ddy_string and epw_string:
 
     # recipe inputs where a file needs to be uploaded
     artifacts = {
-        'model': {'file_path': hbjson_file, 'pollination_target_path': ''}
-        'ddy': {'file_path': ddy_file, 'pollination_target_path': ''}
+        'model': {'file_path': hbjson_file, 'pollination_target_path': ''},
+        'ddy': {'file_path': ddy_file, 'pollination_target_path': ''},
         'epw': {'file_path': epw_file, 'pollination_target_path': ''}
     }
     # TODO: change ends
