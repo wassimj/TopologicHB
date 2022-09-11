@@ -112,7 +112,7 @@ if epw_uploaded_file:
     epw_name = epw_uploaded_file.name
 if submitted and ddy_string and epw_string:
     # create HBJSON file path
-    hbjson_file = Path('.', 'model.hbjson')
+    hbjson_file = Path('.', 'topologic_model.hbjson')
     # write HBJSON file
     hbjson_file.write_bytes(hbjson_string.encode('utf-8'))
 

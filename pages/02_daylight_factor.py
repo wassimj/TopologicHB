@@ -88,7 +88,7 @@ with st.form('daylight-factor-job'):
 
     if submit_button:
         # create HBJSON file path
-        hbjson_file = Path('.', 'model.hbjson')
+        hbjson_file = Path('.', 'topologic_model.hbjson')
         # write HBJSON file
         hbjson_file.write_bytes(hbjson_string.encode('utf-8'))
 
