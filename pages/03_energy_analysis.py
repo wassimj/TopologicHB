@@ -127,8 +127,8 @@ if submitted and ddy_string and epw_string:
     # TODO: This will change based on the recipe you select
 
     arguments = {
-        'ddy': 'CARDIFF.ddy',
-        'epw': 'CARDIFF.epw',
+        'ddy': 'ddy',
+        'epw': 'epw',
     }
 
     # recipe inputs where a file needs to be uploaded
