@@ -108,7 +108,7 @@ if ddy_file:
     ddy = stringByUploadedFile(ddy_file)
 if epw_file:
     epw = stringByUploadedFile(epw_file)
-if submitted and ddy_data and epw_data:
+if submitted and ddy and epw:
     # create HBJSON file path
     hbjson_file = Path('.', 'model.hbjson')
     # write HBJSON file
