@@ -96,30 +96,39 @@ with st.form('energy-analysis'):
 
     #st.markdown('Recipe inputs')
 
-    ddy_file = st.file_uploader('Upload DDY File', type='ddy')
-    epw_file = st.file_uploader('Upload EPW File', type='epw')
+    ddy_uploaded_file = st.file_uploader('Upload DDY File', type='ddy')
+    epw_uploaded_file = st.file_uploader('Upload EPW File', type='epw')
 
-    epw = None
-    ddy = None
+    ddy_string = None
+    epw_string = None
 
     submitted = st.form_submit_button('Submit')
 
 if ddy_file:
-    ddy = stringByUploadedFile(ddy_file)
+    ddy_string = stringByUploadedFile(ddy_uploaded_file)
 if epw_file:
-    epw = stringByUploadedFile(epw_file)
-if submitted and ddy and epw:
+    epw_string = stringByUploadedFile(epw_uploaded_file)
+if submitted and ddy_string and epw_string:
     # create HBJSON file path
     hbjson_file = Path('.', 'model.hbjson')
     # write HBJSON file
     hbjson_file.write_bytes(hbjson_string.encode('utf-8'))
 
+    # create DDY file path
+    ddy_file = Path('.', 'CARDIFF.ddy')
+    # write DDY file
+    ddy_file.write_bytes(ddy_string.encode('utf-8'))
+    # create EPW file path
+    epw_file = Path('.', 'CARDIFF.epw')
+    # write EPW file
+    epw_file.write_bytes(epw_string.encode('utf-8'))
+
     # recipe inputs
     # TODO: This will change based on the recipe you select
 
     arguments = {
-        'ddy': ddy,
-        'epw': epw,
+        'ddy': ddy_file,
+        'epw': epw_file,
     }
 
     # recipe inputs where a file needs to be uploaded
