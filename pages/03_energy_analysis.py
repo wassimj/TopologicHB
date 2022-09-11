@@ -104,9 +104,9 @@ with st.form('energy-analysis'):
 
     submitted = st.form_submit_button('Submit')
 
-if ddy_file:
+if ddy_uploaded_file:
     ddy_string = stringByUploadedFile(ddy_uploaded_file)
-if epw_file:
+if epw_uploaded_file:
     epw_string = stringByUploadedFile(epw_uploaded_file)
 if submitted and ddy_string and epw_string:
     # create HBJSON file path
