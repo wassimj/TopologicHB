@@ -149,5 +149,5 @@ if submitted and ddy_string and epw_string:
     job = new_job.create()
     if job:
         st.subheader("JOB HAS BEEN SUBMITTED. CHECK ITS PROGRESS ON POLLINATION CLOUD")
-        st.write(dir(job))
-        st.session['energyanalysis_job'] = job
+        st.write(job.id())
+        st.session['energyanalysis_job'] = job.id()
