@@ -134,4 +134,6 @@ if submitted and ddy and epw:
                         description=job_description, client=api_client)
     new_job = add_recipe_to_job(new_job, arguments, artifacts)
     job = new_job.create()
-    st.write("JOB", job)
+    if job:
+        st.subheader("JOB HAS BEEN SUBMITTED. CHECK ITS PROGRESS ON POLLINATION CLOUD")
+        st.write(job)
