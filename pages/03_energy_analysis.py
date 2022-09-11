@@ -20,7 +20,7 @@ from io import StringIO
 #--------------------------
 
 def stringByUploadedFile(uploaded_file):
-    return StringIO(uploaded_file.decode())
+    return uploaded_file.getvalue().decode('utf-8')
 
 # PAGE CONFIGURATION
 st.set_page_config(
