@@ -96,11 +96,11 @@ with st.form('energy-analysis'):
 
     if ddy_data:
         ddy_file = Path('.', 'weather.ddy')
-        ddy_file.write_bytes(ddy_data.encode('utf-8'))
+        ddy_file.write_bytes(ddy_data.getvalue().encode('utf-8'))
     
     if epw_data:
         epw_file = Path('.', 'weather.epw')
-        epw_file.write_bytes(epw_data.encode('utf-8'))
+        epw_file.write_bytes(epw_data.getvalue().encode('utf-8'))
 
     submit_button = st.form_submit_button(
         label='Submit')
