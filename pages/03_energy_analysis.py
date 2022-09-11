@@ -150,3 +150,4 @@ if submitted and ddy_string and epw_string:
     if job:
         st.subheader("JOB HAS BEEN SUBMITTED. CHECK ITS PROGRESS ON POLLINATION CLOUD")
         st.write(job)
+        st.session['energyanalysis_job'] = job.id

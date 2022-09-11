@@ -113,3 +113,7 @@ with st.form('daylight-factor-job'):
                          description=job_description, client=api_client)
         new_job = add_recipe_to_job(new_job, arguments, artifacts)
         job = new_job.create()
+        if job:
+            st.subheader("JOB HAS BEEN SUBMITTED. CHECK ITS PROGRESS ON POLLINATION CLOUD")
+            st.write(job)
+            st.session['daylight_job'] = job.id

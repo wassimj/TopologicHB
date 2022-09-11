@@ -261,6 +261,10 @@ if 'Apertures' not in st.session_state:
     st.session_state['Apertures'] = None
 if 'hbjson' not in st.session_state:
     st.session_state['hbjson'] = None
+if 'daylight_job' not in st.session_state:
+    st.session_state['daylight_job'] = None
+if 'energyanalysis_job' not in st.session_state:
+    st.session_state['energyanalysis_job'] = None
 try:
      access_code = st.experimental_get_query_params()['access_code'][0]
      st.session_state['access_code'] = access_code
