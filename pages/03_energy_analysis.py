@@ -88,22 +88,24 @@ with st.form('energy-analysis'):
     st.markdown('---')
 
     st.markdown('Recipe inputs')
-    epw = None
     ddy = None
+    epw = None
 
-    epw_file = st.file_uploader('Upload EPW File', type="epw")
-    ddy_file = st.file_uploader('Upload DDY File', type="ddy")
+    ddy_data = st.file_uploader('Upload DDY File', type="ddy")
+    epw_data = st.file_uploader('Upload EPW File', type="epw")
 
-    if epw_file:
-        epw = epw_file.getvalue().decode('utf-8')
-    if ddy_file:
-        ddy = ddy_file.getvalue().decode('utf-8')
-    # TODO: change ends
+    if ddy_data:
+        ddy_file = Path('.', 'weather.ddy')
+        ddy_file.write_bytes(ddy_data.encode('utf-8'))
+    
+    if epw_data:
+        epw_file = Path('.', 'weather.epw')
+        epw_file.write_bytes(epw_data.encode('utf-8'))
 
     submit_button = st.form_submit_button(
         label='Submit')
 
-    if submit_button and epw and ddy:
+    if submit_button and ddy and epw:
         # create HBJSON file path
         hbjson_file = Path('.', 'model.hbjson')
         # write HBJSON file
@@ -111,14 +113,15 @@ with st.form('energy-analysis'):
 
         # recipe inputs
         # TODO: This will change based on the recipe you select
-        arguments = {
-            'ddy': ddy,
-            'epw': epw,
-        }
+        arguments = {}
+        #arguments = {
+            #'ddy': ddy_file,
+            #'epw': epw_file,
+        #}
 
         # recipe inputs where a file needs to be uploaded
         artifacts = {
-            'model': {'file_path': hbjson_file, 'pollination_target_path': ''}
+            'model': {'file_path': hbjson_file, 'ddy': ddy_file, 'epw': epw_file, 'pollination_target_path': ''}
         }
         # TODO: change ends
 
