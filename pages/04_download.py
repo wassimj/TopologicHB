@@ -32,7 +32,7 @@ with st.form('download-result'):
     job_names = ["Select a Job", "Daylight Factor", "Energy Analysis"]
     option = st.selectbox(
         'Select a Job',
-        type_names)
+        job_names)
     if option != "Select a Job":
         job_type = option
     if job_type == "Daylight Factor":
