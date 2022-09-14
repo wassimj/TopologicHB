@@ -46,7 +46,7 @@ def download_sql(api_key: str, owner: str, project: str, job_id: str):
     return job.downloadJobArtifact(owner, project, job_id, path_to_file)
 
 submit_button = None
-
+job_type = None
 with st.form('download-result'):
     api_key = st.text_input('api_key', type='password')
     owner = st.text_input('owner')
