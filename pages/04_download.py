@@ -58,9 +58,9 @@ with st.form('download-result'):
     if option != "Select a Job":
         job_type = option
     if job_type == "Daylight Factor":
-        job_id = st.session['daylight_job']
+        job_id = st.session_state['daylight_job']
     elif job_type == "Energy Analysis":
-        job_id = st.session['energyanalysis_job']
+        job_id = st.session_state['energyanalysis_job']
     run_index = st.number_input('run_index', value=0)
     output_name = st.text_input('output_name')
     submit_button = st.form_submit_button("Submit")
