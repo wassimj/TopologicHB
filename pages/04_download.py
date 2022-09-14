@@ -24,6 +24,26 @@ def download_output(api_key: str, owner: str, project: str, job_id: str, run_ind
     with zipfile.ZipFile(output) as zip_folder:
         zip_folder.extractall(target_folder)
 
+def download_sql(api_key: str, owner: str, project: str, job_id: str):
+    """Download artifact from a job on Pollination.
+
+    Args:
+        api_key: The API key of the Pollination account.
+        owner: The owner of the Pollination account.
+        project: The name of the project inside which the job was created.
+        job_id: The id of the job.
+        run_index: The index of the run inside the job.
+        output_name: The name of the output you wish to download. You can find the names
+            of all the outputs either on the job page or on the recipe page.
+        target_folder: The folder where the output will be downloaded.
+    """
+    job = Job(owner, project, job_id, ApiClient(api_token=api_key))
+    run = job.runs[0]
+    run_id = run.id
+
+    if output_name == 'sql':
+        path_to_file = "/runs/"+run_id+"/workspace/eplsout.sql"
+    return job.downloadJobArtifact(owner, project, job_id, path_to_file)
 
 with st.form('download-result'):
     api_key = st.text_input('api_key', type='password')
@@ -46,6 +66,8 @@ with st.form('download-result'):
         label='Submit')
 
     if submit_button:
-        download_output(owner, project, job_id, api_key,
-                        run_index, output_name, target_folder)
+        output = download_sql(owner, project, job_id, api_key)
+        sql_url = output['url']
+        st.write(sql_url)
+
  
