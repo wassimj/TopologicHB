@@ -25,7 +25,7 @@ def download_output(api_key: str, owner: str, project: str, job_id: str, run_ind
     with zipfile.ZipFile(output) as zip_folder:
         zip_folder.extractall(target_folder)
 
-def download_sql(api_key: str, owner: str, project: str, job_id: str):
+def download_sql(owner: str, project: str, job_id: str, api_key: str):
     """Download artifact from a job on Pollination.
 
     Args:
@@ -38,6 +38,10 @@ def download_sql(api_key: str, owner: str, project: str, job_id: str):
             of all the outputs either on the job page or on the recipe page.
         target_folder: The folder where the output will be downloaded.
     """
+    st.write("API Key", api_key)
+    st.write("OWNER", owner)
+    st.write("PROJECT", project)
+    st.write("JOB ID",job_id)
     job = Job(owner, project, job_id, ApiClient(api_token=api_key))
     st.write(job.id)
     run = job.runs[0]
@@ -68,7 +72,7 @@ with st.form('download-result'):
     submit_button = st.form_submit_button("Submit")
     if submit_button:
         output = download_sql(owner, project, job_id, api_key)
-        sql_url = output['url']
-        st.write(sql_url)
+        #sql_url = output['url']
+        #st.write(sql_url)
 
  
