@@ -2,6 +2,7 @@ import zipfile
 import streamlit as st
 from pollination_streamlit.interactors import Job
 from pollination_streamlit.api.client import ApiClient
+import json
 
 def download_output(api_key: str, owner: str, project: str, job_id: str, run_index: int,
                     output_name: str, target_folder: str) -> None:
@@ -38,8 +39,7 @@ def download_sql(api_key: str, owner: str, project: str, job_id: str):
         target_folder: The folder where the output will be downloaded.
     """
     job = Job(owner, project, job_id, ApiClient(api_token=api_key))
-    st.write(job.name)
-    st.write(job.runs)
+    st.write(json.dumps(job))
     run = job.runs[0]
     run_id = run.id
 
