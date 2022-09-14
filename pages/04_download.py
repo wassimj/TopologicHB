@@ -45,6 +45,8 @@ def download_sql(api_key: str, owner: str, project: str, job_id: str):
         path_to_file = "/runs/"+run_id+"/workspace/eplsout.sql"
     return job.downloadJobArtifact(owner, project, job_id, path_to_file)
 
+submit_button = None
+
 with st.form('download-result'):
     api_key = st.text_input('api_key', type='password')
     owner = st.text_input('owner')
@@ -61,7 +63,6 @@ with st.form('download-result'):
         job_id = st.session['energyanalysis_job']
     run_index = st.number_input('run_index', value=0)
     output_name = st.text_input('output_name')
-    target_folder = st.text_input('target_folder', value='.')
     submit_button = st.form_submit_button(
         label='Submit')
 
