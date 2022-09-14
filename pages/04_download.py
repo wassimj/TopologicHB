@@ -63,12 +63,11 @@ with st.form('download-result'):
         job_id = st.session['energyanalysis_job']
     run_index = st.number_input('run_index', value=0)
     output_name = st.text_input('output_name')
-    submit_button = st.form_submit_button(
-        label='Submit')
-
-    if submit_button:
-        output = download_sql(owner, project, job_id, api_key)
-        sql_url = output['url']
-        st.write(sql_url)
+submit_button = st.form_submit_button(
+    label='Submit')
+if submit_button:
+    output = download_sql(owner, project, job_id, api_key)
+    sql_url = output['url']
+    st.write(sql_url)
 
  
