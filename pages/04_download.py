@@ -39,7 +39,7 @@ def download_sql(api_key: str, owner: str, project: str, job_id: str):
         target_folder: The folder where the output will be downloaded.
     """
     job = Job(owner, project, job_id, ApiClient(api_token=api_key))
-    st.write(json.dumps(job))
+    st.write(dir(job))
     run = job.runs[0]
     run_id = run.id
 
