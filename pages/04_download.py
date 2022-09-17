@@ -2,7 +2,7 @@ import zipfile
 import streamlit as st
 from pollination_streamlit.interactors import Job
 from pollination_streamlit.api.client import ApiClient
-import pollination_sdk
+from pollination_sdk import JobsApi
 import json
 
 
@@ -23,8 +23,8 @@ def download_sql(owner: str, project: str, job_id: str, api_key: str):
     st.write("OWNER", owner)
     st.write("PROJECT", project)
     st.write("JOB ID",job_id)
-    api_instance = pollination_sdk.JobsApi(api_client)
-    api_response = api_instance.list_jobs(owner, project, ApiClient(api_token=api_key))
+    api_instance = JobsApi(ApiClient(api_token=api_key))
+    api_response = api_instance.list_jobs(owner, project)
     st.write(api_response)
     job = Job(owner, project, job_id, ApiClient(api_token=api_key))
     st.write(job.id)
