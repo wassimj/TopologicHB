@@ -2,7 +2,7 @@ import zipfile
 import streamlit as st
 from pollination_streamlit.interactors import Job
 from pollination_streamlit.api.client import ApiClient
-from pollination_sdk import Jobs
+import pollination_sdk
 import json
 
 
