@@ -66,13 +66,16 @@ with st.form('download-result'):
     if job_type == "Daylight Factor":
         job_id = st.session_state['daylight_job']
     elif job_type == "Energy Analysis":
-        job_id = st.session_state['energyanalysis_job']
+        #job_id = st.session_state['energyanalysis_job']
+        # For testing only. I am hard-coding the job id:
+        job_id = "4f485478"
     run_index = st.number_input('run_index', value=0)
     output_name = st.text_input('output_name')
-    submit_button = st.form_submit_button("Submit")
-    if submit_button:
-        output = download_sql(owner, project, job_id, api_key)
-        #sql_url = output['url']
-        #st.write(sql_url)
+    submit_button = st.form_submit_button()
+
+if submit_button:
+    output = download_sql(owner, project, job_id, api_key)
+    #sql_url = output['url']
+    #st.write(sql_url)
 
  
