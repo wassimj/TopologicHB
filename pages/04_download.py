@@ -24,7 +24,7 @@ def download_sql(owner: str, project: str, job_id: str, api_key: str):
     st.write("PROJECT", project)
     st.write("JOB ID",job_id)
     #st.write(dir(pollination_sdk))
-    projects = pollination_sdk.ProjectList(owner, ApiClient(api_token=api_key), page_count=0 )
+    projects = pollination_sdk.ProjectList(owner, ApiClient(api_token=api_key), page_count=1, per_page=100 )
     st.write("Projects:",projects)
     api_instance = Jobs(ApiClient(api_token=api_key))
     api_response = api_instance.list_jobs(owner, project)
