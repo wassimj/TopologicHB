@@ -4,26 +4,6 @@ from pollination_streamlit.interactors import Job
 from pollination_streamlit.api.client import ApiClient
 import json
 
-def download_output(api_key: str, owner: str, project: str, job_id: str, run_index: int,
-                    output_name: str, target_folder: str) -> None:
-    """Download output from a job on Pollination.
-
-    Args:
-        api_key: The API key of the Pollination account.
-        owner: The owner of the Pollination account.
-        project: The name of the project inside which the job was created.
-        job_id: The id of the job.
-        run_index: The index of the run inside the job.
-        output_name: The name of the output you wish to download. You can find the names
-            of all the outputs either on the job page or on the recipe page.
-        target_folder: The folder where the output will be downloaded.
-    """
-    job = Job(owner, project, job_id, ApiClient(api_token=api_key))
-    run = job.runs[run_index]
-    output = run.download_zipped_output(output_name)
-
-    with zipfile.ZipFile(output) as zip_folder:
-        zip_folder.extractall(target_folder)
 
 def download_sql(owner: str, project: str, job_id: str, api_key: str):
     """Download artifact from a job on Pollination.
@@ -44,6 +24,7 @@ def download_sql(owner: str, project: str, job_id: str, api_key: str):
     st.write("JOB ID",job_id)
     job = Job(owner, project, job_id, ApiClient(api_token=api_key))
     st.write(job.id)
+    st.write(job.runs)
     run = job.runs[0]
     run_id = run.id
 
