@@ -1,10 +1,11 @@
 import streamlit as st
 from pollination_streamlit.selectors import get_api_client
-from pollination_streamlit_io import auth_user, select_account, select_project
+from pollination_streamlit_io import auth_user, select_account, select_project, select_study, select_run
+import pollination_sdk
 import json
 
 
-def download_sql(owner: str, project: str, job_id: str, api_key: str):
+def download_sql(owner: str, project: str, job, run_id: str):
     """Download artifact from a job on Pollination.
 
     Args:
@@ -17,26 +18,10 @@ def download_sql(owner: str, project: str, job_id: str, api_key: str):
             of all the outputs either on the job page or on the recipe page.
         target_folder: The folder where the output will be downloaded.
     """
-    st.write("API Key", api_key)
-    st.write("OWNER", owner)
-    st.write("PROJECT", project)
-    st.write("JOB ID",job_id)
-    #st.write(dir(pollination_sdk))
-    projects = pollination_sdk.ProjectList(owner, ApiClient(api_token=api_key), page_count=1, per_page=100, resources=1, total_count=100 )
-    st.write("Projects:",projects)
-    api_instance = Jobs(ApiClient(api_token=api_key))
-    api_response = api_instance.list_jobs(owner, project)
-    st.write(api_response)
-    job = Job(owner, project, job_id, ApiClient(api_token=api_key))
-    st.write(job.id)
-    st.write(job.name)
-    st.write(job.runs)
-    run = job.runs[0]
-    run_id = run.id
-
-    if output_name == 'sql':
-        path_to_file = "/runs/"+run_id+"/workspace/eplsout.sql"
-    return job.downloadJobArtifact(owner, project, job_id, path_to_file)
+    path_to_file = "/runs/"+run_id+"/workspace/eplsout.sql"
+    api_instance = pollination_sdk.ArtifactsApi(api_client)
+    api_response = api_instance.download_artifact(owner, project, path=path_to_file)
+    return api_response
 
 submit_button = None
 job_type = None
@@ -47,7 +32,23 @@ if api_client:
     user = auth_user('auth-user', api_client)
 if account and user:
     project = select_project('select-project', api_client, project_owner=user['username'])
-
+if project:
+    study = select_study(
+                'select-study',
+                api_client,
+                project_name=project['name'],
+                project_owner=user['username']
+            )
+if study:
+    run = select_run(
+                    'select-run',
+                    api_client,
+                    project_name=project['name'],
+                    project_owner=user['username'],
+                    job_id=study['id']
+                )
+if run:
+    download_sql(owner=user['username'], project=project['name'], job_id=study['id'], run_id=run['id'])
 #api_key = st.text_input('api_key', type='password')
 
 '''
