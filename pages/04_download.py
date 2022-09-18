@@ -23,10 +23,16 @@ def download_sql(api_client, owner: str, project: str, run_id: str):
     api_response = api_instance.download_artifact(owner, project, path=path_to_file)
     return api_response
 
-submit_button = None
-job_type = None
+
+
 
 api_client = get_api_client()
+account = None
+user = None
+project = None
+study = None
+run = None
+
 if api_client:
     account = select_account('select-account', api_client) or ''
     user = auth_user('auth-user', api_client)
