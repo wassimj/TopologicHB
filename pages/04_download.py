@@ -5,7 +5,7 @@ import pollination_sdk
 import json
 
 
-def download_sql(owner: str, project: str, job, run_id: str):
+def download_sql(owner: str, project: str, run_id: str):
     """Download artifact from a job on Pollination.
 
     Args:
@@ -48,7 +48,7 @@ if study:
                     job_id=study['id']
                 )
 if run:
-    download_sql(owner=user['username'], project=project['name'], job_id=study['id'], run_id=run['id'])
+    download_sql(owner=user['username'], project=project['name'], run_id=run['id'])
 #api_key = st.text_input('api_key', type='password')
 
 '''
