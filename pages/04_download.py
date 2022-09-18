@@ -1,6 +1,6 @@
 import streamlit as st
 from pollination_streamlit.selectors import get_api_client
-from pollination_streamlit_io import auth_user, select_account
+from pollination_streamlit_io import auth_user, select_account, select_project
 import json
 
 
@@ -42,7 +42,11 @@ submit_button = None
 job_type = None
 
 api_client = get_api_client()
-account = select_account('select-account', api_client) or ''
+if api_client:
+    account = select_account('select-account', api_client) or ''
+    user = auth_user('auth-user', api_client)
+if account and user:
+    project = select_project('select-project', api_client, project_owner=user['username'])
 
 #api_key = st.text_input('api_key', type='password')
 
