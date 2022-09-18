@@ -54,7 +54,7 @@ if study:
                     job_id=study['id']
                 )
 if run:
-    download_sql(api_client=api_client, owner=user['username'], project=project['name'], run_id=run['id'])
+    download_sql(api_client=api_client, owner=account['name'], project=project['name'], run_id=run['id'])
 #api_key = st.text_input('api_key', type='password')
 
 '''
