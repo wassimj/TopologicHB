@@ -42,6 +42,7 @@ submit_button = None
 job_type = None
 
 api_client = get_api_client()
+account = select_account('select-account', api_client) or ''
 
 #api_key = st.text_input('api_key', type='password')
 
