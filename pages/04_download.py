@@ -35,7 +35,6 @@ run = None
 
 if api_client:
     account = select_account('select-account', api_client) or ''
-    st.header(account['id'])
     user = auth_user('auth-user', api_client)
 if account and user:
     project = select_project('select-project', api_client, project_owner=user['username'])
