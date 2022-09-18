@@ -54,53 +54,7 @@ if study:
                     job_id=study['id']
                 )
 if run:
-    download_sql(api_client=api_client, owner=account['username'], project=project, run_id=run['id'])
-#api_key = st.text_input('api_key', type='password')
-
-'''
-if api_key:
-
-st.header("Authenticated User")
-
-acol1, acol2 = st.columns(2)
-
-with acol1:
-    user = auth_user('auth-user', api_client)
-    if user is not None:
-        st.json(user, expanded=False)
-
-with acol2:
-    account = select_account('select-account', api_client) or ''
-    if account is not None and 'username' in account:
-        st.json(account, expanded=False)
-
-
-
-
-with st.form('download-result'):
-    api_key = st.text_input('api_key', type='password')
-    owner = st.text_input('owner')
-    project = st.text_input('project')
-    job_names = ["Select a Job", "Daylight Factor", "Energy Analysis"]
-    option = st.selectbox(
-        'Select a Job',
-        job_names)
-    if option != "Select a Job":
-        job_type = option
-    if job_type == "Daylight Factor":
-        job_id = st.session_state['daylight_job']
-    elif job_type == "Energy Analysis":
-        #job_id = st.session_state['energyanalysis_job']
-        # For testing only. I am hard-coding the job id:
-        job_id = "4f485478"
-    run_index = st.number_input('run_index', value=0)
-    output_name = st.text_input('output_name')
-    submit_button = st.form_submit_button()
-
-if submit_button:
-    output = download_sql(owner, project, job_id, api_key)
-    #sql_url = output['url']
-    #st.write(sql_url)
-
- 
- '''
+    api_instance = pollination_sdk.RunsApi(api_client)
+    path_to_file = "/runs/"+run['id']+"/workspace/eplsout.sql"
+    api_response = api_instance.download_run_artifact(account['username'], project['name'], run['id'], path=path_to_file)
+    st.write(api_response)
