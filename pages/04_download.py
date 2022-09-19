@@ -7,7 +7,7 @@ from pollination_streamlit.api.client import ApiClient
 import json
 import zipfile
 
-def download_output(api_key: str, owner: str, project: str, job_id: str, run_index: int,
+def download_output(api_key: str, owner: str, project: str, run,
                     output_name: str, target_folder: str) -> None:
     """Download output from a job on Pollination.
 
@@ -21,8 +21,8 @@ def download_output(api_key: str, owner: str, project: str, job_id: str, run_ind
             of all the outputs either on the job page or on the recipe page.
         target_folder: The folder where the output will be downloaded.
     """
-    job = Job(owner, project, job_id, ApiClient(api_token=api_key))
-    run = job.runs[run_index]
+    #job = Job(owner, project, job_id, ApiClient(api_token=api_key))
+    #run = study.runs[run_index]
     output = run.download_zipped_output(output_name)
 
     with zipfile.ZipFile(output) as zip_folder:
@@ -63,7 +63,7 @@ if run:
     api_instance = pollination_sdk.RunsApi(api_client)
     path_to_file = "/runs/"+run['id']+"/workspace/eplsout.sql"
 
-    download_output(api_key=api_key, owner=account['username'], project=project['name'], job_id=run['id'], run_index=0,
+    download_output(api_key=api_key, owner=account['username'], project=project['name'], run=run,
                     output_name='eplsout.sql', target_folder='.')
 
     #api_response = api_instance.download_run_artifact(owner=account['username'], name=project['name'], run_id=run['id'], path=path_to_file)
