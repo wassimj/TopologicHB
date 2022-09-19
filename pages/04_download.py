@@ -56,5 +56,5 @@ if study:
 if run:
     api_instance = pollination_sdk.RunsApi(api_client)
     path_to_file = "/runs/"+run['id']+"/workspace/eplsout.sql"
-    api_response = api_instance.download_run_artifact(project['name'], run['id'], path=path_to_file)
+    api_response = api_instance.download_run_artifact(owner=account['username'], project=project['name'], run_id=run['id'], path=path_to_file)
     st.write(api_response)
