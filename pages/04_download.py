@@ -2,11 +2,14 @@ import streamlit as st
 from pollination_streamlit.selectors import get_api_client
 from pollination_streamlit_io import auth_user, select_account, select_project, select_study, select_run
 import pollination_sdk
+from pollination_streamlit.interactors import Job
+from pollination_streamlit.api.client import ApiClient
 import json
+import zipfile
 
-
-def download_sql(api_client, owner, project, run_id: str):
-    """Download artifact from a job on Pollination.
+def download_output(api_key: str, owner: str, project: str, job_id: str, run_index: int,
+                    output_name: str, target_folder: str) -> None:
+    """Download output from a job on Pollination.
 
     Args:
         api_key: The API key of the Pollination account.
@@ -18,12 +21,12 @@ def download_sql(api_client, owner, project, run_id: str):
             of all the outputs either on the job page or on the recipe page.
         target_folder: The folder where the output will be downloaded.
     """
-    path_to_file = "/runs/"+run_id+"/workspace/eplsout.sql"
-    api_instance = pollination_sdk.ArtifactsApi(api_client)
-    api_response = api_instance.download_artifact(owner, project, path=path_to_file)
-    return api_response
+    job = Job(owner, project, job_id, ApiClient(api_token=api_key))
+    run = job.runs[run_index]
+    output = run.download_zipped_output(output_name)
 
-
+    with zipfile.ZipFile(output) as zip_folder:
+        zip_folder.extractall(target_folder)
 
 
 api_client = get_api_client()
@@ -33,18 +36,21 @@ project = None
 study = None
 run = None
 
+api_key = st.text_input('api_key', type='password')
+if api_key:
+    api_client = ApiClient(api_token=api_key)
 if api_client:
     account = select_account('select-account', api_client) or ''
-    user = auth_user('auth_user', api_client)
+    user = auth_user('auth_user', api_client) or ''
 if account and user:
-    project = select_project('select-project', api_client, project_owner=user['username'])
+    project = select_project('select-project', api_client, project_owner=user['username']) or ''
 if project:
     study = select_study(
                 'select-study',
                 api_client,
                 project_name=project['name'],
                 project_owner=user['username']
-            )
+            ) or ''
 if study:
     run = select_run(
                     'select-run',
@@ -52,9 +58,13 @@ if study:
                     project_name=project['name'],
                     project_owner=user['username'],
                     job_id=study['id']
-                )
+                ) or ''
 if run:
     api_instance = pollination_sdk.RunsApi(api_client)
     path_to_file = "/runs/"+run['id']+"/workspace/eplsout.sql"
-    api_response = api_instance.download_run_artifact(owner=account['username'], name=project['name'], run_id=run['id'], path=path_to_file)
-    st.write(api_response)
+
+    download_output(api_key=api_key, owner=account['username'], project=project['name'], job_id=study['id'], run_index=0,
+                    output_name='eplsout.sql', target_folder='.')
+
+    #api_response = api_instance.download_run_artifact(owner=account['username'], name=project['name'], run_id=run['id'], path=path_to_file)
+    #st.write(api_response)
