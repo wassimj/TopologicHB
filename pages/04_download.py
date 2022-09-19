@@ -63,7 +63,7 @@ if run:
     api_instance = pollination_sdk.RunsApi(api_client)
     path_to_file = "/runs/"+run['id']+"/workspace/eplsout.sql"
 
-    download_output(api_key=api_key, owner=account['username'], project=project['name'], job_id=study['id'], run_index=0,
+    download_output(api_key=api_key, owner=account['username'], project=project['name'], job_id=run['id'], run_index=0,
                     output_name='eplsout.sql', target_folder='.')
 
     #api_response = api_instance.download_run_artifact(owner=account['username'], name=project['name'], run_id=run['id'], path=path_to_file)
