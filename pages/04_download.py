@@ -1,9 +1,9 @@
 import streamlit as st
-from pollination_streamlit.selectors import get_api_client
 from pollination_streamlit_io import auth_user, select_account, select_project, select_study, select_run
 import pollination_sdk
 from pollination_streamlit.interactors import Job
 from pollination_streamlit.api.client import ApiClient
+from pollination_streamlit.selectors import (get_api_client, job_selector)
 import json
 import zipfile
 
@@ -45,12 +45,7 @@ if api_client:
 if account and user:
     project = select_project('select-project', api_client, project_owner=user['username']) or ''
 if project:
-    study = select_study(
-                'select-study',
-                api_client,
-                project_name=project['name'],
-                project_owner=user['username']
-            ) or ''
+    study = job_selector(api_client)
 if study:
     run = select_run(
                     'select-run',
@@ -65,6 +60,51 @@ if run:
 
     download_output(api_key=api_key, owner=account['username'], project=project['name'], run=run,
                     output_name='eplsout.sql', target_folder='.')
+
+def handleSelectArtifact():
+    bytes = st.session_state['sel_artifact'].download().read()
+    st.session_state['text'] = bytes.decode('utf8')
+
+def formatArtifact(artifact):
+    if 'key' in artifact.__dict__:
+        return artifact.key
+    else:
+        return ''
+
+if 'text' not in st.session_state:
+    st.session_state['text'] = ''
+
+if 'artifacts' not in st.session_state:
+    st.session_state['artifacts'] = []
+
+def followArtifactTree(artifact_array):
+    for artifact in artifact_array:
+        if artifact.is_folder:
+            followArtifactTree(artifact.list_children())
+        else :
+              st.session_state['artifacts'].append(artifact)
+    
+if study is not None:
+    artifacts = study.list_artifacts()
+
+    if artifacts is not None:
+        followArtifactTree(artifacts)
+
+st.selectbox(
+  'Select an artifact', 
+  options= st.session_state['artifacts'], 
+  key='sel_artifact', 
+  on_change=handleSelectArtifact, 
+  format_func=formatArtifact
+)
+
+st.download_button(
+    label='Download Text File', 
+    data=st.session_state['text'], 
+    file_name=st.session_state['sel_artifact'].key if st.session_state['sel_artifact'] is not None else '', 
+    key='download-button',
+    disabled=st.session_state['text'] == ''
+)
 
     #api_response = api_instance.download_run_artifact(owner=account['username'], name=project['name'], run_id=run['id'], path=path_to_file)
     #st.write(api_response)
