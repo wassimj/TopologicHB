@@ -36,9 +36,12 @@ project = None
 study = None
 run = None
 
-api_key = st.text_input('api_key', type='password')
-if api_key:
-    api_client = ApiClient(api_token=api_key)
+
+api_client = get_api_client()
+study = job_selector(api_client)
+
+
+'''
 if api_client:
     account = select_account('select-account', api_client) or ''
     user = auth_user('auth_user', api_client) or ''
