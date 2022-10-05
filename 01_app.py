@@ -259,6 +259,8 @@ if 'Building' not in st.session_state:
     st.session_state['Building'] = None
 if 'Apertures' not in st.session_state:
     st.session_state['Apertures'] = None
+if 'Shading' not in st.session_state:
+    st.session_state['Shading'] = None
 if 'hbjson' not in st.session_state:
     st.session_state['hbjson'] = None
 if 'daylight_job' not in st.session_state:
@@ -320,7 +322,7 @@ if st.session_state['refresh_token']:
 commit_type = "Building"
 if isinstance(streams, list):
     if len(streams) > 0:
-        type_names = ["Select a type", "Building", "Apertures"]
+        type_names = ["Select a type", "Building", "Apertures", "Shading"]
         option = st.selectbox(
             'Select A Type',
             type_names)
@@ -397,11 +399,11 @@ if isinstance(streams, list):
                         
 building = st.session_state['Building']
 apertureCluster = st.session_state['Apertures']
+shadingCluster = st.session_state['Shading']
 
 if building and apertureCluster and isinstance(building, topologic.CellComplex) and isinstance(apertureCluster, topologic.Cluster):
     new_building = TopologyAddApertures.processItem([building, apertureCluster, True, 0.0001, "Face"])
     st.write("New Building:", new_building)
-    shadingCluster = None
     if new_building:
         hbmodel = HBModelByTopology.processItem(tpBuilding=new_building,
                         tpShadingFacesCluster=shadingCluster,
